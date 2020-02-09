@@ -25,18 +25,27 @@ import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import androidx.core.view.updateLayoutParams
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.ViewModelProvider
 import com.insiderser.android.calculator.calculator.dagger.DaggerCalculatorComponent
 import com.insiderser.android.calculator.calculator.databinding.CalculatorFragmentBinding
+import com.insiderser.android.calculator.core.dagger.SavedStateFactory
 import com.insiderser.android.calculator.core.ui.binding.FragmentWithViewBinding
 import com.insiderser.android.calculator.navigation.NavigationHost
 import dev.chrisbanes.insetter.doOnApplyWindowInsets
+import javax.inject.Inject
 
 /**
  * Main fragment that allows user to calculate mathematical expressions.
  */
 class CalculatorFragment : FragmentWithViewBinding<CalculatorFragmentBinding>() {
+
+    @Inject
+    @SavedStateFactory
+    internal lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    private val viewModel: CalculatorFragmentViewModel by viewModels { viewModelFactory }
 
     override fun onAttach(context: Context) {
         injectItself()
@@ -52,13 +61,14 @@ class CalculatorFragment : FragmentWithViewBinding<CalculatorFragmentBinding>() 
         (activity as? NavigationHost)?.registerToolbarWithNavigation(binding.toolbar)
 
         binding.statusBar.doOnApplyWindowInsets { view, insets, _ ->
-            view.updateLayoutParams<LinearLayout.LayoutParams> {
+            view.updateLayoutParams<ViewGroup.LayoutParams> {
                 height = insets.systemWindowInsetTop
             }
         }
     }
 
     private fun injectItself() {
-        DaggerCalculatorComponent.create().inject(this)
+        val feature1Component = DaggerCalculatorComponent.factory().create(this)
+        feature1Component.inject(this)
     }
 }

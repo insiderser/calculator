@@ -19,31 +19,28 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.insiderser.android.calculator.core.dagger
+package com.insiderser.android.calculator.calculator.ui
 
-import androidx.lifecycle.ViewModelProvider
-import dagger.Binds
-import dagger.Module
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
+import com.insiderser.android.calculator.core.dagger.AssistedViewModelFactory
+import com.squareup.inject.assisted.Assisted
+import com.squareup.inject.assisted.AssistedInject
 
 /**
- * Module used to define connection between the framework's [ViewModelProvider.Factory]
- * and out own implementation: [ViewModelFactory].
+ * A [ViewModel] for [CalculatorFragment].
  */
-@Module
-interface ViewModelFactoryModule {
+internal class CalculatorFragmentViewModel @AssistedInject constructor(
+    @Assisted private val savedStateHandle: SavedStateHandle
+) : ViewModel() {
 
     /**
-     * Define connection between the framework's [ViewModelProvider.Factory]
-     * and out own implementation: [ViewModelFactory].
+     * Tells AssistedInject to generate a factory for [CalculatorFragmentViewModel].
+     * Must be inside of the target [ViewModel] class.
      */
-    @Binds
-    fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
-
-    /**
-     * Define connection between the framework's [ViewModelProvider.Factory]
-     * and out own implementation: [SavedStateViewModelFactory].
-     */
-    @Binds
-    @SavedStateFactory
-    fun bindSavedStateViewModelFactory(factory: SavedStateViewModelFactory): ViewModelProvider.Factory
+    @AssistedInject.Factory
+    interface Factory : AssistedViewModelFactory<CalculatorFragmentViewModel> {
+        // TODO remove create() override after https://github.com/square/AssistedInject/pull/121 is merged
+        override fun create(savedStateHandle: SavedStateHandle): CalculatorFragmentViewModel
+    }
 }

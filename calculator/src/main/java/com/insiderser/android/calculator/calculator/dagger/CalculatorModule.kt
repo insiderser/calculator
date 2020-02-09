@@ -19,31 +19,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.insiderser.android.calculator.core.dagger
+package com.insiderser.android.calculator.calculator.dagger
 
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import com.insiderser.android.calculator.calculator.ui.CalculatorFragmentViewModel
+import com.insiderser.android.calculator.core.dagger.AssistedViewModelFactory
+import com.insiderser.android.calculator.core.dagger.ViewModelKey
+import com.squareup.inject.assisted.dagger2.AssistedModule
 import dagger.Binds
 import dagger.Module
+import dagger.multibindings.IntoMap
 
 /**
- * Module used to define connection between the framework's [ViewModelProvider.Factory]
- * and out own implementation: [ViewModelFactory].
+ * Dagger module for feature1 module. It tells dagger how to create [CalculatorFragmentViewModel].
  */
-@Module
-interface ViewModelFactoryModule {
+@AssistedModule
+@Module(includes = [AssistedInject_CalculatorModule::class])
+internal interface CalculatorModule {
 
-    /**
-     * Define connection between the framework's [ViewModelProvider.Factory]
-     * and out own implementation: [ViewModelFactory].
-     */
     @Binds
-    fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
-
-    /**
-     * Define connection between the framework's [ViewModelProvider.Factory]
-     * and out own implementation: [SavedStateViewModelFactory].
-     */
-    @Binds
-    @SavedStateFactory
-    fun bindSavedStateViewModelFactory(factory: SavedStateViewModelFactory): ViewModelProvider.Factory
+    @IntoMap
+    @ViewModelKey(CalculatorFragmentViewModel::class)
+    fun bindCalculatorFragmentViewModelFactory(f: CalculatorFragmentViewModel.Factory): AssistedViewModelFactory<out ViewModel>
 }
