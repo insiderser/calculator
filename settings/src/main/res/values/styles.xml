@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2020 Oleksandr Bezushko
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+<resources>
+
+    <style name="Widget.Template.Settings.PreferenceView" parent="">
+        <item name="android:paddingTop">@dimen/settings_preference_padding_vertical</item>
+        <item name="android:paddingBottom">@dimen/settings_preference_padding_vertical</item>
+        <item name="android:paddingStart">@dimen/settings_preference_padding_horizontal</item>
+        <item name="android:paddingEnd">@dimen/settings_preference_padding_horizontal</item>
+
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="Widget.Template.Settings.PreferenceTitle" parent="Widget.MaterialComponents.TextView">
+        <item name="singleLine">true</item>
+        <item name="android:textAppearance">?attr/textAppearanceListItem</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+        <item name="android:ellipsize">marquee</item>
+        <item name="android:fadingEdge">horizontal</item>
+    </style>
+
+    <style name="Widget.Template.Settings.PreferenceSummary" parent="Widget.MaterialComponents.TextView">
+        <item name="android:maxLines">4</item>
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+        <item name="android:textAppearance">?attr/textAppearanceListItemSecondary</item>
+    </style>
+
+    <style name="Widget.Template.Settings.PreferenceGroupTitle" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_marginStart">@dimen/settings_category_margin_horizontal</item>
+        <item name="android:layout_marginEnd">@dimen/settings_category_margin_horizontal</item>
+        <item name="android:layout_marginTop">@dimen/settings_category_margin_top</item>
+
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+        <item name="android:textColor">?attr/colorSecondary</item>
+    </style>
+
+    <style name="Widget.Template.Settings.Divider" parent="">
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:background">?attr/dividerHorizontal</item>
+    </style>
+</resources>
