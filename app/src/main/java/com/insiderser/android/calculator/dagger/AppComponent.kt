@@ -22,8 +22,6 @@
 package com.insiderser.android.calculator.dagger
 
 import com.insiderser.android.calculator.CalculatorApplication
-import com.insiderser.android.calculator.core.dagger.CoreComponent
-import com.insiderser.android.calculator.core.dagger.CoreModule
 import com.insiderser.android.calculator.core.dagger.ViewModelFactoryModule
 import com.insiderser.android.calculator.prefs.data.dagger.PreferencesStorageComponent
 import com.insiderser.android.calculator.prefs.data.dagger.PreferencesStorageModule
@@ -45,14 +43,13 @@ import javax.inject.Singleton
 @Component(
     modules = [
         AndroidInjectionModule::class,
-        CoreModule::class,
         ContextModule::class,
         ViewModelFactoryModule::class,
         ActivityBindingModule::class,
         PreferencesStorageModule::class
     ]
 )
-internal interface AppComponent : AndroidInjector<CalculatorApplication>, CoreComponent,
+internal interface AppComponent : AndroidInjector<CalculatorApplication>,
     PreferencesStorageComponent {
 
     /**

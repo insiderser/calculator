@@ -27,16 +27,14 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import androidx.core.view.updateLayoutParams
-import androidx.fragment.app.Fragment
 import com.insiderser.android.calculator.calculator.dagger.DaggerCalculatorComponent
 import com.insiderser.android.calculator.calculator.databinding.CalculatorFragmentBinding
-import com.insiderser.android.calculator.core.dagger.CoreComponentProvider
 import com.insiderser.android.calculator.core.ui.binding.FragmentWithViewBinding
 import com.insiderser.android.calculator.navigation.NavigationHost
 import dev.chrisbanes.insetter.doOnApplyWindowInsets
 
 /**
- * Sample [Fragment] that does nothing, except injecting into itself.
+ * Main fragment that allows user to calculate mathematical expressions.
  */
 class CalculatorFragment : FragmentWithViewBinding<CalculatorFragmentBinding>() {
 
@@ -61,10 +59,6 @@ class CalculatorFragment : FragmentWithViewBinding<CalculatorFragmentBinding>() 
     }
 
     private fun injectItself() {
-        val coreComponentProvider = requireActivity().application as CoreComponentProvider
-        val coreComponent = coreComponentProvider.coreComponent
-
-        val feature1Component = DaggerCalculatorComponent.factory().create(coreComponent)
-        feature1Component.inject(this)
+        DaggerCalculatorComponent.create().inject(this)
     }
 }

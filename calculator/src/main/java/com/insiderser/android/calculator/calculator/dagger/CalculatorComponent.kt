@@ -22,26 +22,16 @@
 package com.insiderser.android.calculator.calculator.dagger
 
 import com.insiderser.android.calculator.calculator.ui.CalculatorFragment
-import com.insiderser.android.calculator.core.dagger.CoreComponent
 import com.insiderser.android.calculator.core.dagger.FeatureScope
 import dagger.Component
 
 /**
  * Component for calculator module.
- * @see com.insiderser.android.calculator.calculator.dagger.DaggerCalculatorComponent.factory
  */
 @FeatureScope
-@Component(dependencies = [CoreComponent::class])
+@Component
 internal interface CalculatorComponent {
 
     /** Inject dependencies into [CalculatorFragment]. */
     fun inject(fragment: CalculatorFragment)
-
-    @Component.Factory
-    interface Factory {
-
-        fun create(
-            coreComponent: CoreComponent
-        ): CalculatorComponent
-    }
 }
