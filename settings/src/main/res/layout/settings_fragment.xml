@@ -29,7 +29,7 @@
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/app_bar"
-        style="@style/Widget.Template.AppBar"
+        style="@style/Widget.Calculator.AppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
@@ -56,28 +56,28 @@
 
             <TextView
                 android:id="@+id/theme_group_label"
-                style="@style/Widget.Template.Settings.PreferenceGroupTitle"
+                style="@style/Widget.Calculator.Settings.PreferenceGroupTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_theme_group_label" />
 
-            <com.insiderser.android.template.settings.widget.PreferenceView
+            <com.insiderser.android.calculator.settings.widget.PreferenceView
                 android:id="@+id/choose_theme_preference"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:title="@string/settings_choose_theme"
                 tools:summary="@string/settings_theme_follow_system" />
 
-            <View style="@style/Widget.Template.Settings.Divider" />
+            <View style="@style/Widget.Calculator.Settings.Divider" />
 
             <TextView
                 android:id="@+id/about_group_label"
-                style="@style/Widget.Template.Settings.PreferenceGroupTitle"
+                style="@style/Widget.Calculator.Settings.PreferenceGroupTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_about_group_label" />
 
-            <com.insiderser.android.template.settings.widget.PreferenceView
+            <com.insiderser.android.calculator.settings.widget.PreferenceView
                 android:id="@+id/version_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

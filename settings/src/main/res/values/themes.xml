@@ -22,6 +22,6 @@
 <resources>
 
     <style name="AppTheme.Settings">
-        <item name="preferenceStyle">@style/Widget.Template.Settings.PreferenceView</item>
+        <item name="preferenceStyle">@style/Widget.Calculator.Settings.PreferenceView</item>
     </style>
 </resources>

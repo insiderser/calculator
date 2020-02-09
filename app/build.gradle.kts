@@ -20,9 +20,9 @@
  * SOFTWARE.
  */
 
-import com.insiderser.android.template.buildSrc.Libs
-import com.insiderser.android.template.buildSrc.configureAndroidModule
-import com.insiderser.android.template.buildSrc.sharedTestImplementation
+import com.insiderser.android.calculator.buildSrc.Libs
+import com.insiderser.android.calculator.buildSrc.configureAndroidModule
+import com.insiderser.android.calculator.buildSrc.sharedTestImplementation
 
 plugins {
     id("com.android.application")
@@ -35,11 +35,11 @@ configureAndroidModule()
 
 android {
     defaultConfig {
-        applicationId = "com.insiderser.android.template"
+        applicationId = "com.insiderser.android.calculator"
 
         testInstrumentationRunnerArgument(
             "listener",
-            "com.insiderser.android.template.test.listeners.CrashingRunListener"
+            "com.insiderser.android.calculator.test.listeners.CrashingRunListener"
         )
     }
 
@@ -68,7 +68,7 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":preferences-data"))
     implementation(project(":navigation"))
-    implementation(project(":feature1"))
+    implementation(project(":calculator"))
     implementation(project(":settings"))
 
     implementation(Libs.AndroidX.material)

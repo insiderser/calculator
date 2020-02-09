@@ -21,7 +21,7 @@
   -->
 <resources>
 
-    <style name="Widget.Template.Settings.PreferenceView" parent="">
+    <style name="Widget.Calculator.Settings.PreferenceView" parent="">
         <item name="android:paddingTop">@dimen/settings_preference_padding_vertical</item>
         <item name="android:paddingBottom">@dimen/settings_preference_padding_vertical</item>
         <item name="android:paddingStart">@dimen/settings_preference_padding_horizontal</item>
@@ -30,7 +30,7 @@
         <item name="android:background">?attr/selectableItemBackground</item>
     </style>
 
-    <style name="Widget.Template.Settings.PreferenceTitle" parent="Widget.MaterialComponents.TextView">
+    <style name="Widget.Calculator.Settings.PreferenceTitle" parent="Widget.MaterialComponents.TextView">
         <item name="singleLine">true</item>
         <item name="android:textAppearance">?attr/textAppearanceListItem</item>
         <item name="android:textColor">?android:attr/textColorPrimary</item>
@@ -38,13 +38,13 @@
         <item name="android:fadingEdge">horizontal</item>
     </style>
 
-    <style name="Widget.Template.Settings.PreferenceSummary" parent="Widget.MaterialComponents.TextView">
+    <style name="Widget.Calculator.Settings.PreferenceSummary" parent="Widget.MaterialComponents.TextView">
         <item name="android:maxLines">4</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>
         <item name="android:textAppearance">?attr/textAppearanceListItemSecondary</item>
     </style>
 
-    <style name="Widget.Template.Settings.PreferenceGroupTitle" parent="Widget.MaterialComponents.TextView">
+    <style name="Widget.Calculator.Settings.PreferenceGroupTitle" parent="Widget.MaterialComponents.TextView">
         <item name="android:layout_marginStart">@dimen/settings_category_margin_horizontal</item>
         <item name="android:layout_marginEnd">@dimen/settings_category_margin_horizontal</item>
         <item name="android:layout_marginTop">@dimen/settings_category_margin_top</item>
@@ -53,7 +53,7 @@
         <item name="android:textColor">?attr/colorSecondary</item>
     </style>
 
-    <style name="Widget.Template.Settings.Divider" parent="">
+    <style name="Widget.Calculator.Settings.Divider" parent="">
         <item name="android:layout_height">1dp</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:background">?attr/dividerHorizontal</item>

@@ -1,29 +1,7 @@
-## Android Template
+## Calculator
 
-[![Gradle build](https://github.com/Insiderser/AndroidTemplate/workflows/Build/badge.svg)](https://github.com/Insiderser/AndroidTemplate/actions?query=branch%3Amaster+workflow%3Abuild)
-[![Codacy badge](https://api.codacy.com/project/badge/Grade/041b5a6aaea24bb58766ac38b02263b5)](https://www.codacy.com/manual/Insiderser/AndroidTemplate?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Insiderser/AndroidTemplate&amp;utm_campaign=Badge_Grade)
-
-This is the project that contains all the common
-logic that I use (or plan to use) to build Android apps.
-
-This template includes:
-
-- boilerplate code that we do in most Android apps nowadays
-- multi-module setup with reusable build logic in [buildSrc](buildSrc/)
-- CI configuration with GitHub Actions
-- Dagger setup
-- settings
-
-### Architecture
-
-![App hierarchy](hierarchy.png)
-
-The project is multi-module. All feature modules have their own modules.
-Notice we have this `navigation` module which (you guessed it) contains
-everything needed for navigation between features. Also, we have those
-shared modules that share code between different modules.
-
-The architecture was heavily inspired by [this presentation](https://youtu.be/jrnhIgFzgns).
+[![Gradle build](https://github.com/Insiderser/calculator/workflows/Build/badge.svg)](https://github.com/Insiderser/calculator/actions?query=branch%3Amaster+workflow%3Abuild)
+[![Codacy badge](https://api.codacy.com/project/badge/Grade/041b5a6aaea24bb58766ac38b02263b5)](https://www.codacy.com/manual/Insiderser/calculator?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Insiderser/AndroidTemplate&amp;utm_campaign=Badge_Grade)
 
 ### License
 

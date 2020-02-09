@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-import com.insiderser.android.template.buildSrc.Libs
+import com.insiderser.android.calculator.buildSrc.Libs
 
 plugins {
     `java-library`

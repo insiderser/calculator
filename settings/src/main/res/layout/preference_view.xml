@@ -22,17 +22,17 @@
 <merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:orientation="vertical"
-    tools:parentTag="com.insiderser.android.template.settings.widget.PreferenceView">
+    tools:parentTag="com.insiderser.android.calculator.settings.widget.PreferenceView">
 
     <TextView
         android:id="@+id/title"
-        style="@style/Widget.Template.Settings.PreferenceTitle"
+        style="@style/Widget.Calculator.Settings.PreferenceTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
     <TextView
         android:id="@+id/summary"
-        style="@style/Widget.Template.Settings.PreferenceSummary"
+        style="@style/Widget.Calculator.Settings.PreferenceSummary"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:visibility="gone" />

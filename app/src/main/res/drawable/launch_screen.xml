@@ -26,7 +26,7 @@
     <item android:drawable="?attr/colorSurface" />
 
     <item
-        android:drawable="@mipmap/ic_launcher"
+        android:drawable="@drawable/ic_launcher"
         android:gravity="center" />
 
 </layer-list>

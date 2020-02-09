@@ -24,12 +24,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/app_nav"
-    app:startDestination="@id/feature1">
+    app:startDestination="@id/calculator_dest">
 
     <fragment
-        android:id="@+id/feature1"
-        android:name="com.insiderser.android.template.feature1.ui.Feature1Fragment" />
+        android:id="@+id/calculator_dest"
+        android:name="com.insiderser.android.calculator.calculator.ui.CalculatorFragment" />
     <fragment
-        android:id="@+id/settings"
-        android:name="com.insiderser.android.template.settings.ui.SettingsFragment" />
+        android:id="@+id/settings_dest"
+        android:name="com.insiderser.android.calculator.settings.ui.SettingsFragment" />
 </navigation>
