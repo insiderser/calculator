@@ -30,6 +30,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import com.insiderser.android.calculator.calculator.dagger.DaggerCalculatorComponent
 import com.insiderser.android.calculator.calculator.databinding.CalculatorFragmentBinding
+import com.insiderser.android.calculator.core.dagger.CoreComponentProvider
 import com.insiderser.android.calculator.core.dagger.SavedStateFactory
 import com.insiderser.android.calculator.core.ui.binding.FragmentWithViewBinding
 import com.insiderser.android.calculator.navigation.NavigationHost
@@ -68,7 +69,10 @@ class CalculatorFragment : FragmentWithViewBinding<CalculatorFragmentBinding>() 
     }
 
     private fun injectItself() {
-        val feature1Component = DaggerCalculatorComponent.factory().create(this)
-        feature1Component.inject(this)
+        val coreComponentProvider = requireActivity().application as CoreComponentProvider
+        val coreComponent = coreComponentProvider.coreComponent
+
+        val calculatorComponent = DaggerCalculatorComponent.factory().create(coreComponent, this)
+        calculatorComponent.inject(this)
     }
 }

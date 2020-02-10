@@ -19,27 +19,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.insiderser.android.calculator.calculator.ui
-
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import com.insiderser.android.calculator.core.dagger.AssistedViewModelFactory
-import com.squareup.inject.assisted.Assisted
-import com.squareup.inject.assisted.AssistedInject
+package com.insiderser.android.calculator.core.dagger
 
 /**
- * A [ViewModel] for [CalculatorFragment].
+ * Instances of this class can provide app-level [CoreComponent].
+ *
+ * This should be implemented by [application][android.app.Application]s and used by
+ * feature modules to get app-level dependencies.
  */
-internal class CalculatorFragmentViewModel @AssistedInject constructor(
-    @Assisted private val savedStateHandle: SavedStateHandle
-) : ViewModel() {
+interface CoreComponentProvider {
 
     /**
-     * Tells AssistedInject to generate a factory for [CalculatorFragmentViewModel].
-     * Must be inside of the target [ViewModel] class.
+     * [CoreComponent] component implementation that can provide dependencies.
      */
-    @AssistedInject.Factory
-    interface Factory : AssistedViewModelFactory<CalculatorFragmentViewModel> {
-        override fun create(savedStateHandle: SavedStateHandle): CalculatorFragmentViewModel
-    }
+    val coreComponent: CoreComponent
 }

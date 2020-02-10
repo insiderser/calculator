@@ -24,6 +24,7 @@ package com.insiderser.android.calculator.calculator.dagger
 import android.os.Bundle
 import androidx.savedstate.SavedStateRegistryOwner
 import com.insiderser.android.calculator.calculator.ui.CalculatorFragment
+import com.insiderser.android.calculator.core.dagger.CoreComponent
 import com.insiderser.android.calculator.core.dagger.DefaultArgs
 import com.insiderser.android.calculator.core.dagger.FeatureScope
 import com.insiderser.android.calculator.core.dagger.ViewModelFactoryModule
@@ -34,7 +35,10 @@ import dagger.Component
  * Component for calculator module.
  */
 @FeatureScope
-@Component(modules = [ViewModelFactoryModule::class, CalculatorModule::class])
+@Component(
+    dependencies = [CoreComponent::class],
+    modules = [ViewModelFactoryModule::class, CalculatorModule::class]
+)
 internal interface CalculatorComponent {
 
     /** Inject dependencies into [CalculatorFragment]. */
@@ -44,6 +48,7 @@ internal interface CalculatorComponent {
     interface Factory {
 
         fun create(
+            coreComponent: CoreComponent,
             @BindsInstance savedStateRegistryOwner: SavedStateRegistryOwner,
             @BindsInstance @DefaultArgs defaultArgs: Bundle? = null
         ): CalculatorComponent

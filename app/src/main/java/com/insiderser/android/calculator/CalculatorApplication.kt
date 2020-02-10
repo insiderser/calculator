@@ -23,6 +23,8 @@ package com.insiderser.android.calculator
 
 import android.os.StrictMode
 import androidx.appcompat.app.AppCompatDelegate
+import com.insiderser.android.calculator.core.dagger.CoreComponent
+import com.insiderser.android.calculator.core.dagger.CoreComponentProvider
 import com.insiderser.android.calculator.core.domain.invoke
 import com.insiderser.android.calculator.core.util.toAppCompatNightMode
 import com.insiderser.android.calculator.dagger.AppComponent
@@ -46,7 +48,8 @@ import javax.inject.Inject
  * This class executes basic app configuration, such as building a
  * Dagger graph, initializing libraries that need to be initialized on startup, etc.
  */
-class CalculatorApplication : DaggerApplication(), PreferencesStorageComponentProvider {
+class CalculatorApplication : DaggerApplication(), CoreComponentProvider,
+    PreferencesStorageComponentProvider {
 
     private val appScope = CoroutineScope(Dispatchers.Main)
 
@@ -103,5 +106,6 @@ class CalculatorApplication : DaggerApplication(), PreferencesStorageComponentPr
      */
     override fun applicationInjector(): AndroidInjector<CalculatorApplication> = appComponent
 
+    override val coreComponent: CoreComponent get() = appComponent
     override val preferencesStorageComponent: PreferencesStorageComponent get() = appComponent
 }

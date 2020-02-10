@@ -22,6 +22,7 @@
 package com.insiderser.android.calculator.dagger
 
 import com.insiderser.android.calculator.CalculatorApplication
+import com.insiderser.android.calculator.core.dagger.CoreComponent
 import com.insiderser.android.calculator.core.dagger.ViewModelFactoryModule
 import com.insiderser.android.calculator.prefs.data.dagger.PreferencesStorageComponent
 import com.insiderser.android.calculator.prefs.data.dagger.PreferencesStorageModule
@@ -49,7 +50,7 @@ import javax.inject.Singleton
         PreferencesStorageModule::class
     ]
 )
-internal interface AppComponent : AndroidInjector<CalculatorApplication>,
+internal interface AppComponent : AndroidInjector<CalculatorApplication>, CoreComponent,
     PreferencesStorageComponent {
 
     /**
