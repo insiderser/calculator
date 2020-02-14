@@ -21,12 +21,8 @@
  */
 
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import com.insiderser.android.calculator.buildSrc.Versions
-import com.insiderser.android.calculator.buildSrc.loadProperties
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-// FIXME: cannot use imports in buildscript: https://github.com/gradle/gradle/issues/9270
-@Suppress("RemoveRedundantQualifierName")
 buildscript {
     repositories {
         google()
@@ -42,7 +38,6 @@ buildscript {
 }
 
 plugins {
-    id("com.diffplug.gradle.spotless") version "3.27.1"
     id("com.github.ben-manes.versions") version "0.27.0"
 }
 
@@ -55,46 +50,18 @@ allprojects {
     }
 }
 
-loadProperties(file("local.properties"))
-
 subprojects {
-    apply(plugin = "com.diffplug.gradle.spotless")
-    spotless {
-        kotlin {
-            target("**/*.kt")
-            ktlint(Versions.ktlint).userData(
-                mapOf(
-                    // TODO: KtLint import ordering conflicts with IntelliJ's.
-                    //   See https://github.com/pinterest/ktlint/issues/527
-                    "disabled_rules" to "import-ordering"
-                )
-            )
-            @Suppress("INACCESSIBLE_TYPE")
-            licenseHeaderFile(rootProject.file("spotless/copyright.kt"))
-        }
-    }
-
     tasks.withType<KotlinCompile> {
         kotlinOptions {
             allWarningsAsErrors = true
-            jvmTarget = Versions.jvmTarget
+            jvmTarget = "1.8"
 
-            val compilerArgs = mutableListOf(
+            freeCompilerArgs = mutableListOf(
                 "-Xjsr305=strict",
-                "-Xuse-experimental=kotlin.Experimental"
+                "-Xuse-experimental=kotlin.Experimental",
+                "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+                "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
             )
-
-            // We don't use coroutines or flow in those projects. Because of this,
-            // Kotlin compiler will generate a warning that will fail our build
-            // because we have `allWarningsAsErrors = true`
-            val projectNamesWithoutCoroutinesFlow = arrayOf("model", "test-shared")
-            if (this@subprojects.name !in projectNamesWithoutCoroutinesFlow) {
-                compilerArgs += listOf(
-                    "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                    "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
-                )
-            }
-            freeCompilerArgs = compilerArgs
         }
     }
 }

@@ -34,7 +34,6 @@ import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.insiderser.android.calculator.R
 import com.insiderser.android.calculator.databinding.MainActivityBinding
-import com.insiderser.android.calculator.navigation.NavigationHost
 import dev.chrisbanes.insetter.doOnApplyWindowInsets
 
 /**

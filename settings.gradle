@@ -21,5 +21,4 @@
  */
 
 rootProject.name = "Calculator"
-include ':app', ':core', ':test-shared', ':data', ':calculator', ':model', ':preferences-data',
-        ':settings', ':navigation'
+include ':app'

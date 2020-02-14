@@ -60,7 +60,7 @@ class CalculatorFragmentTest {
         // openActionBarOverflowOrOptionsMenu(...) doesn't pass in CI
         openContextualActionModeOverflowMenu()
 
-        onView(withText(R.string.settings))
+        onView(withText(R.string.settings_title))
             .inRoot(isPlatformPopup())
             .check(matches(isCompletelyDisplayed()))
             .perform(click())
@@ -70,15 +70,13 @@ class CalculatorFragmentTest {
         checkInCalculatorFragment()
     }
 
-    private fun checkInCalculatorFragment() {
-        // TODO
-        onView(withId(R.id.i_am_a_fragment_text_view))
-            .check(matches(isCompletelyDisplayed()))
-            .check(matches(withText("I am a Fragment")))
-    }
-
     private fun checkInSettings() {
         onView(allOf(instanceOf(TextView::class.java), withParent(withId(R.id.toolbar))))
             .check(matches(withText(R.string.settings_title)))
+    }
+
+    private fun checkInCalculatorFragment() {
+        onView(withText("=")).check(matches(isCompletelyDisplayed()))
+        onView(withText("÷")).check(matches(isCompletelyDisplayed()))
     }
 }

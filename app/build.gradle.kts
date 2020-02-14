@@ -21,26 +21,41 @@
  */
 
 import com.insiderser.android.calculator.buildSrc.Libs
-import com.insiderser.android.calculator.buildSrc.configureAndroidModule
-import com.insiderser.android.calculator.buildSrc.sharedTestImplementation
 
 plugins {
     id("com.android.application")
     kotlin("android")
     kotlin("android.extensions")
     kotlin("kapt")
+    id("androidx.navigation.safeargs.kotlin")
 }
 
-configureAndroidModule()
-
 android {
+    compileSdkVersion(29)
+    buildToolsVersion("29.0.3")
+
     defaultConfig {
+        targetSdkVersion(29)
+        minSdkVersion(23)
+
+        versionName = "1.0.0"
+        versionCode = 1
         applicationId = "com.insiderser.android.calculator"
 
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunnerArgument(
             "listener",
             "com.insiderser.android.calculator.test.listeners.CrashingRunListener"
         )
+
+        javaCompileOptions {
+            annotationProcessorOptions {
+                arguments = mapOf(
+                    "room.incremental" to "true",
+                    "room.expandProjection" to "true"
+                )
+            }
+        }
     }
 
     signingConfigs {
@@ -55,41 +70,97 @@ android {
     buildTypes {
         named("debug") {
             signingConfig = signingConfigs.getByName("debug")
-            applicationIdSuffix = ".debug"
+        }
+    }
+
+    viewBinding {
+        isEnabled = true
+    }
+
+    compileOptions {
+        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        named("test") {
+            java.srcDir("src/sharedTest/java")
+        }
+        named("androidTest") {
+            java.srcDir("src/sharedTest/java")
+        }
+    }
+
+    lintOptions {
+        isWarningsAsErrors = true
+        isAbortOnError = true
+        setLintConfig(rootProject.file("lint.xml"))
+    }
+
+    testOptions {
+        animationsDisabled = true
+        unitTests.run {
+            isIncludeAndroidResources = true
         }
     }
 }
 
-kapt {
-    correctErrorTypes = true
+fun DependencyHandler.sharedTestImplementation(dependencyNotation: String) {
+    testImplementation(dependencyNotation)
+    androidTestImplementation(dependencyNotation)
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation(project(":preferences-data"))
-    implementation(project(":navigation"))
-    implementation(project(":calculator"))
-    implementation(project(":settings"))
+    implementation(Libs.Kotlin.stdlib)
+    implementation(Libs.Kotlin.Coroutines.core)
+    implementation(Libs.Kotlin.Coroutines.android)
+    testImplementation(Libs.Kotlin.Coroutines.test)
+
+    implementation(Libs.AndroidX.coreKtx)
+    implementation(Libs.AndroidX.appcompat)
+    implementation(Libs.AndroidX.constraintLayout)
+
+    implementation(Libs.AndroidX.Lifecycle.extensions)
+    implementation(Libs.AndroidX.Lifecycle.lifecycleKtx)
+    implementation(Libs.AndroidX.Lifecycle.liveDataKtx)
+    implementation(Libs.AndroidX.Lifecycle.viewModelKtx)
+    implementation(Libs.AndroidX.Lifecycle.savedState)
 
     implementation(Libs.AndroidX.material)
-    implementation(Libs.AndroidX.Activity.activityKtx)
-    implementation(Libs.AndroidX.Fragment.fragmentKtx)
+    implementation(Libs.AndroidX.Activity.activity)
+    implementation(Libs.AndroidX.Fragment.fragment)
+    debugImplementation(Libs.AndroidX.Fragment.testing)
 
-    implementation(Libs.Dagger.androidSupport)
+    implementation(Libs.AndroidX.Navigation.ui)
+    implementation(Libs.AndroidX.Navigation.fragment)
+
+    implementation(Libs.AndroidX.Room.common)
+    implementation(Libs.AndroidX.Room.ktx)
+    implementation(Libs.AndroidX.Room.runtime)
+    kapt(Libs.AndroidX.Room.compiler)
+
+    implementation(Libs.AndroidX.Paging.runtime)
+
+    implementation(Libs.timber)
+    implementation(Libs.Insetter.ktx)
+    implementation(Libs.exp4j)
+
+    implementation(Libs.Dagger.dagger)
     kapt(Libs.Dagger.compiler)
-    kapt(Libs.Dagger.androidProcessor)
 
     debugImplementation(Libs.leakCanary)
 
-    sharedTestImplementation(project(":test-shared"))
+    sharedTestImplementation(Libs.Test.junit4)
+    sharedTestImplementation(Libs.Test.truth)
+    testImplementation(Libs.Test.mockK)
 
     sharedTestImplementation(Libs.Test.AndroidX.core)
     sharedTestImplementation(Libs.Test.AndroidX.runner)
     sharedTestImplementation(Libs.Test.AndroidX.rules)
     sharedTestImplementation(Libs.Test.AndroidX.ext)
-    sharedTestImplementation(Libs.Test.AndroidX.extTruth)
     sharedTestImplementation(Libs.Test.AndroidX.arch)
 
+    testImplementation(Libs.Test.Robolectric.robolectric)
     androidTestImplementation(Libs.Test.AndroidX.Espresso.core)
     androidTestImplementation(Libs.Test.AndroidX.Espresso.intents)
 }

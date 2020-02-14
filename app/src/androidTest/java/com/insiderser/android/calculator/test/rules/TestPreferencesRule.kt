@@ -22,8 +22,8 @@
 package com.insiderser.android.calculator.test.rules
 
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
-import com.insiderser.android.calculator.prefs.data.AppPreferencesStorage
-import com.insiderser.android.calculator.prefs.data.AppPreferencesStorageImpl
+import com.insiderser.android.calculator.data.prefs.AppPreferencesStorage
+import com.insiderser.android.calculator.data.prefs.AppPreferencesStorageImpl
 import org.junit.rules.TestWatcher
 import org.junit.runner.Description
 
@@ -37,7 +37,6 @@ class TestPreferencesRule(
 ) : TestWatcher() {
 
     override fun starting(description: Description?) {
-        super.starting(description)
         AppPreferencesStorageImpl(getApplicationContext()).run {
             selectedTheme = null
 

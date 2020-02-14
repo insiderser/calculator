@@ -22,34 +22,16 @@
 package com.insiderser.android.calculator.buildSrc
 
 /**
- * A wrapper for high-level version config used in build scripts.
- */
-object Versions {
-    object Sdk {
-        const val compile = 29
-        const val target = 29
-        const val min = 23
-    }
-
-    const val versionName = "1.0.0" // X.Y.Z; X = Major, Y = minor, Z = Patch level
-
-    const val jvmTarget = "1.8"
-
-    const val buildToolsVersion = "29.0.2"
-
-    const val ktlint = "0.36.0"
-}
-
-/**
  * A wrapper for all dependencies' notations used in the project together with their versions.
  */
 object Libs {
-    // Don't forget to update version in buildSrc/build.gradle.kts
-    const val androidGradlePlugin = "com.android.tools.build:gradle:3.6.0-rc02"
+    const val androidGradlePlugin = "com.android.tools.build:gradle:3.6.0-rc03"
 
     const val timber = "com.jakewharton.timber:timber:4.7.1"
 
     const val leakCanary = "com.squareup.leakcanary:leakcanary-android:2.2"
+
+    const val exp4j = "net.objecthunter:exp4j:0.4.8"
 
     object Test {
         const val junit4 = "junit:junit:4.13"
@@ -59,7 +41,6 @@ object Libs {
         object Robolectric {
             private const val version = "4.3.1"
             const val robolectric = "org.robolectric:robolectric:$version"
-            const val annotations = "org.robolectric:annotations:$version"
         }
 
         object AndroidX {
@@ -82,7 +63,6 @@ object Libs {
     object Kotlin {
         private const val kotlinVersion = "1.3.61"
         const val stdlib = "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlinVersion"
-        const val reflect = "org.jetbrains.kotlin:kotlin-reflect:$kotlinVersion"
         const val gradlePlugin = "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlinVersion"
 
         object Coroutines {
@@ -97,25 +77,17 @@ object Libs {
         const val coreKtx = "androidx.core:core-ktx:1.2.0"
         const val appcompat = "androidx.appcompat:appcompat:1.1.0"
         const val material = "com.google.android.material:material:1.1.0"
-        const val browser = "androidx.browser:browser:1.2.0"
-        const val collection = "androidx.collection:collection-ktx:1.1.0"
         const val recyclerView = "androidx.recyclerview:recyclerview:1.1.0"
-        const val swipeRefreshLayout = "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
         const val constraintLayout = "androidx.constraintlayout:constraintlayout:2.0.0-beta4"
-        const val drawerLayout = "androidx.drawerlayout:drawerlayout:1.0.0"
-        const val preference = "androidx.preference:preference:1.1.0"
-        const val security = "androidx.security:security-crypto:1.0.0-alpha02"
 
         object Activity {
             private const val version = "1.1.0"
-            const val activity = "androidx.activity:activity:$version"
-            const val activityKtx = "androidx.activity:activity-ktx:$version"
+            const val activity = "androidx.activity:activity-ktx:$version"
         }
 
         object Fragment {
             private const val version = "1.2.1"
-            const val fragment = "androidx.fragment:fragment:$version"
-            const val fragmentKtx = "androidx.fragment:fragment-ktx:$version"
+            const val fragment = "androidx.fragment:fragment-ktx:$version"
             const val testing = "androidx.fragment:fragment-testing:$version"
         }
 
@@ -138,7 +110,6 @@ object Libs {
             const val viewModelKtx = "androidx.lifecycle:lifecycle-viewmodel-ktx:$version"
             const val liveDataKtx = "androidx.lifecycle:lifecycle-livedata-ktx:$version"
             const val lifecycleKtx = "androidx.lifecycle:lifecycle-runtime-ktx:$version"
-            const val compiler = "androidx.lifecycle:lifecycle-compiler:$version"
             const val savedState = "androidx.lifecycle:lifecycle-viewmodel-savedstate:$version"
         }
 
@@ -149,12 +120,6 @@ object Libs {
             const val compiler = "androidx.room:room-compiler:$version"
             const val ktx = "androidx.room:room-ktx:$version"
             const val testing = "androidx.room:room-testing:$version"
-        }
-
-        object Work {
-            private const val version = "2.3.0"
-            const val runtimeKtx = "androidx.work:work-runtime-ktx:$version"
-            const val testing = "androidx.work:work-testing:$version"
         }
     }
 
@@ -170,26 +135,6 @@ object Libs {
         private const val version = "0.5.2"
         const val annotations = "com.squareup.inject:assisted-inject-annotations-dagger2:$version"
         const val processor = "com.squareup.inject:assisted-inject-processor-dagger2:$version"
-    }
-
-    object Retrofit {
-        private const val version = "2.7.1"
-        const val retrofit = "com.squareup.retrofit2:retrofit:$version"
-        const val mock = "com.squareup.retrofit2:retrofit-mock:$version"
-        const val moshiConverter = "com.squareup.retrofit2:converter-moshi:$version"
-    }
-
-    object OkHttp {
-        private const val version = "4.3.1"
-        const val okHttp = "com.squareup.okhttp3:okhttp:$version"
-        const val loggingInterceptor = "com.squareup.okhttp3:logging-interceptor:$version"
-        const val mockWebServer = "com.squareup.okhttp3:mockwebserver:$version"
-    }
-
-    object Moshi {
-        private const val version = "1.9.2"
-        const val moshi = "com.squareup.moshi:moshi:$version"
-        const val codeGenerator = "com.squareup.moshi:moshi-kotlin-codegen:$version"
     }
 
     object Insetter {

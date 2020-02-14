@@ -21,15 +21,15 @@
  */
 package com.insiderser.android.calculator.dagger
 
+import android.app.Activity
+import android.content.Context
+import androidx.fragment.app.Fragment
 import com.insiderser.android.calculator.CalculatorApplication
-import com.insiderser.android.calculator.core.dagger.CoreComponent
-import com.insiderser.android.calculator.core.dagger.ViewModelFactoryModule
-import com.insiderser.android.calculator.prefs.data.dagger.PreferencesStorageComponent
-import com.insiderser.android.calculator.prefs.data.dagger.PreferencesStorageModule
+import com.insiderser.android.calculator.ui.calculator.CalculatorFragment
+import com.insiderser.android.calculator.ui.settings.SettingsFragment
+import com.insiderser.android.calculator.ui.settings.theme.ThemeSettingDialogFragment
 import dagger.BindsInstance
 import dagger.Component
-import dagger.android.AndroidInjectionModule
-import dagger.android.AndroidInjector
 import javax.inject.Singleton
 
 /**
@@ -43,15 +43,16 @@ import javax.inject.Singleton
 @Singleton
 @Component(
     modules = [
-        AndroidInjectionModule::class,
-        ContextModule::class,
-        ViewModelFactoryModule::class,
-        ActivityBindingModule::class,
-        PreferencesStorageModule::class
+        MainActivityModule::class,
+        DataModule::class
     ]
 )
-internal interface AppComponent : AndroidInjector<CalculatorApplication>, CoreComponent,
-    PreferencesStorageComponent {
+interface AppComponent {
+
+    fun inject(application: CalculatorApplication)
+    fun inject(fragment: CalculatorFragment)
+    fun inject(fragment: SettingsFragment)
+    fun inject(fragment: ThemeSettingDialogFragment)
 
     /**
      * Dagger factory for building [AppComponent], binding instances into a dagger graph.
@@ -62,6 +63,9 @@ internal interface AppComponent : AndroidInjector<CalculatorApplication>, CoreCo
         /**
          * Create [AppComponent] & bind [CalculatorApplication] into a dagger graph.
          */
-        fun create(@BindsInstance application: CalculatorApplication): AppComponent
+        fun create(@BindsInstance applicationContext: Context): AppComponent
     }
 }
+
+val Activity.injector: AppComponent get() = (application as CalculatorApplication).appComponent
+val Fragment.injector: AppComponent get() = requireActivity().injector

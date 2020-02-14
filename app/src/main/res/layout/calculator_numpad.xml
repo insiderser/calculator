@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2020 Oleksandr Bezushko
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    tools:ignore="HardcodedText">
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/button_7"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:tag="7"
+            android:text="7" />
+
+        <TextView
+            android:id="@+id/button_4"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:tag="4"
+            android:text="4" />
+
+        <TextView
+            android:id="@+id/button_1"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:tag="1"
+            android:text="1" />
+
+        <TextView
+            android:id="@+id/button_0"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:tag="0"
+            android:text="0" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/button_8"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:tag="8"
+            android:text="8" />
+
+        <TextView
+            android:id="@+id/button_5"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:tag="5"
+            android:text="5" />
+
+        <TextView
+            android:id="@+id/button_2"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:tag="2"
+            android:text="2" />
+
+        <TextView
+            android:id="@+id/button_decimal_separator"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:tag="."
+            android:text="•" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/button_9"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:tag="9"
+            android:text="9" />
+
+        <TextView
+            android:id="@+id/button_6"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:tag="6"
+            android:text="6" />
+
+        <TextView
+            android:id="@+id/button_3"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:tag="3"
+            android:text="3" />
+
+        <TextView
+            android:id="@+id/button_equal"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:text="=" />
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:background="?attr/dividerVertical" />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+        <ImageButton
+            android:id="@+id/button_clear"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:src="@drawable/ic_backspace" />
+
+        <TextView
+            android:id="@+id/button_divide"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:tag="/"
+            android:text="÷" />
+
+        <TextView
+            android:id="@+id/button_multiply"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:tag="*"
+            android:text="×" />
+
+        <TextView
+            android:id="@+id/button_minus"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:tag="-"
+            android:text="-" />
+
+        <TextView
+            android:id="@+id/button_plus"
+            style="@style/Widget.Calculator.Numpad.Button"
+            android:tag="+"
+            android:text="+" />
+
+    </LinearLayout>
+
+    <include
+        android:id="@+id/advanced_numpad"
+        layout="@layout/calculator_advanced_pad" />
+
+</LinearLayout>

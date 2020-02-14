@@ -38,20 +38,4 @@ class MainActivityRule(
 
     override fun getActivityIntent(): Intent = Intent()
         .putExtra(MainActivity.EXTRA_DESTINATION, destination)
-
-    /**
-     * Restart [MainActivity] (finish and relaunch).
-     */
-    fun restartActivity() {
-        finishActivity()
-        launchActivity()
-    }
-
-    /**
-     * Launch [MainActivity] with default intent.
-     * @see restartActivity
-     */
-    fun launchActivity() {
-        launchActivity(activityIntent)
-    }
 }

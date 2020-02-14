@@ -21,20 +21,15 @@
  */
 package com.insiderser.android.calculator
 
+import android.app.Application
 import android.os.StrictMode
 import androidx.appcompat.app.AppCompatDelegate
-import com.insiderser.android.calculator.core.dagger.CoreComponent
-import com.insiderser.android.calculator.core.dagger.CoreComponentProvider
-import com.insiderser.android.calculator.core.domain.invoke
-import com.insiderser.android.calculator.core.util.toAppCompatNightMode
 import com.insiderser.android.calculator.dagger.AppComponent
 import com.insiderser.android.calculator.dagger.DaggerAppComponent
+import com.insiderser.android.calculator.domain.invoke
+import com.insiderser.android.calculator.domain.theme.ObservableThemeUseCase
 import com.insiderser.android.calculator.model.Theme
-import com.insiderser.android.calculator.prefs.data.dagger.PreferencesStorageComponent
-import com.insiderser.android.calculator.prefs.data.dagger.PreferencesStorageComponentProvider
-import com.insiderser.android.calculator.prefs.data.domain.theme.ObservableThemeUseCase
-import dagger.android.AndroidInjector
-import dagger.android.DaggerApplication
+import com.insiderser.android.calculator.model.toAppCompatNightMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -48,19 +43,20 @@ import javax.inject.Inject
  * This class executes basic app configuration, such as building a
  * Dagger graph, initializing libraries that need to be initialized on startup, etc.
  */
-class CalculatorApplication : DaggerApplication(), CoreComponentProvider,
-    PreferencesStorageComponentProvider {
+class CalculatorApplication : Application() {
 
     private val appScope = CoroutineScope(Dispatchers.Main)
 
-    private val appComponent: AppComponent by lazy {
+    val appComponent: AppComponent by lazy {
         DaggerAppComponent.factory().create(this)
     }
 
     @Inject
-    internal lateinit var observableThemeUseCase: ObservableThemeUseCase
+    lateinit var observableThemeUseCase: ObservableThemeUseCase
 
     override fun onCreate() {
+        appComponent.inject(this)
+
         // Enable strict mode before Dagger builds graph
         if (BuildConfig.DEBUG) {
             enableStrictMode()
@@ -68,8 +64,8 @@ class CalculatorApplication : DaggerApplication(), CoreComponentProvider,
 
         super.onCreate()
 
-        initLogging()
-        initTheme()
+        configureLogging()
+        configureTheme()
     }
 
     private fun enableStrictMode() {
@@ -82,13 +78,13 @@ class CalculatorApplication : DaggerApplication(), CoreComponentProvider,
         )
     }
 
-    private fun initLogging() {
+    private fun configureLogging() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
         }
     }
 
-    private fun initTheme() {
+    private fun configureTheme() {
         appScope.launch {
             observableThemeUseCase()
             observableThemeUseCase.observe().collect { updateAppTheme(it) }
@@ -99,13 +95,4 @@ class CalculatorApplication : DaggerApplication(), CoreComponentProvider,
         Timber.d("Setting app theme to $selectedTheme")
         AppCompatDelegate.setDefaultNightMode(selectedTheme.toAppCompatNightMode())
     }
-
-    /**
-     * Returns app-level [Dagger component][dagger.Component], that is used
-     * throughout the app.
-     */
-    override fun applicationInjector(): AndroidInjector<CalculatorApplication> = appComponent
-
-    override val coreComponent: CoreComponent get() = appComponent
-    override val preferencesStorageComponent: PreferencesStorageComponent get() = appComponent
 }
