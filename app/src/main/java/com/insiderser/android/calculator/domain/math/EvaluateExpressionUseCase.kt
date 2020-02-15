@@ -44,7 +44,7 @@ class EvaluateExpressionUseCase @Inject constructor() :
         } catch (e: RuntimeException) {
             throw when (e) {
                 is ArithmeticException, is IllegalArgumentException ->
-                    InvalidExpressionException(param, e)
+                    InvalidExpressionException(e.message)
                 else -> e
             }
         }
@@ -57,8 +57,7 @@ private object FactorialOperator : Operator("!", 1, false, PRECEDENCE_POWER + 1)
         require(arg.isInteger()) { "Operand for factorial has to be an integer, was $arg" }
         require(arg >= 0) { "The operand of the factorial cannot be less than zero, was $arg" }
 
-        val factorial =
-            factorial(arg.toLong())
+        val factorial = factorial(arg.toLong())
         require(factorial.isFinite()) { "Overflow in factorial. Possibly too big number: $arg" }
         return factorial
     }
@@ -67,8 +66,4 @@ private object FactorialOperator : Operator("!", 1, false, PRECEDENCE_POWER + 1)
 /**
  * Thrown to indicate that the expression is invalid.
  */
-class InvalidExpressionException(expression: String, cause: Throwable) :
-    IllegalArgumentException(
-        "Exception occurred while trying to evaluate expression $expression",
-        cause
-    )
+class InvalidExpressionException(message: String?) : IllegalArgumentException(message)
