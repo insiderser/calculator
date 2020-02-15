@@ -19,7 +19,7 @@
   ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
   ~ SOFTWARE.
   -->
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="Widget.Calculator.Toolbar" parent="Widget.MaterialComponents.Toolbar.Surface" />
 
@@ -33,7 +33,6 @@
         <item name="android:paddingBottom">@dimen/calculator_display_padding</item>
         <item name="android:paddingStart">@dimen/calculator_display_padding</item>
         <item name="android:paddingEnd">@dimen/calculator_display_padding</item>
-        <item name="android:importantForAutofill" tools:ignore="NewApi">no</item>
         <item name="android:lines">1</item>
         <item name="android:includeFontPadding">false</item>
     </style>

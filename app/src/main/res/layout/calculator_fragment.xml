@@ -51,6 +51,7 @@
             style="@style/Widget.Calculator.DisplayEditText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:importantForAutofill="no"
             android:textAppearance="?attr/textAppearanceHeadline4"
             tools:ignore="LabelFor"
             tools:text="1 + (3 sin pi)" />
@@ -62,6 +63,7 @@
             android:layout_height="wrap_content"
             android:cursorVisible="false"
             android:focusable="false"
+            android:importantForAutofill="no"
             android:textAppearance="?attr/textAppearanceHeadline5"
             tools:ignore="LabelFor"
             tools:text="1" />

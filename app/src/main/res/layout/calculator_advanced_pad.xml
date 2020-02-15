@@ -20,23 +20,27 @@
   ~ SOFTWARE.
   -->
 
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="wrap_content"
     android:layout_height="match_parent"
-    app:cardBackgroundColor="?attr/colorPrimary"
-    app:cardCornerRadius="0dp"
-    app:cardElevation="@dimen/calculator_elevation"
+    android:background="?attr/colorPrimary"
+    android:clipToPadding="false"
+    android:elevation="@dimen/calculator_elevation"
+    android:orientation="horizontal"
     app:layout_constraintBottom_toBottomOf="@id/divider"
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintTop_toTopOf="@id/divider"
     tools:showIn="@layout/calculator_numpad">
 
+    <!-- TODO if talkback cannot access widgets outside of the screen, add content description -->
     <ImageView
+        android:id="@+id/slide_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:src="@drawable/ic_advanced_numpad_arrow" />
+        android:src="@drawable/ic_advanced_numpad_arrow"
+        tools:ignore="ContentDescription" />
 
-</androidx.cardview.widget.CardView>
+</LinearLayout>

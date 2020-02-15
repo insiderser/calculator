@@ -23,6 +23,8 @@
 <resources>
     <string name="app_name">Calculator</string>
 
+    <string name="calculator_numpad_backspace">Backspace</string>
+
     <string name="settings_title">Settings</string>
 
     <string name="settings_theme_group_label">Theme</string>
