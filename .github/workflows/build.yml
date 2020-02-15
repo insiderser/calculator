@@ -54,7 +54,7 @@ jobs:
           key: ${{ runner.os }}-robolectric-${{ hashFiles('.github/ci-robolectric.properties') }}
 
       - name: Build & test
-        run: sudo ./gradlew dependencyUpdates app:lintDebug testDebugUnitTest app:assembleDebug
+        run: ./gradlew dependencyUpdates app:lintDebug testDebugUnitTest app:assembleDebug
 
       - name: Upload debug APK
         if: always()

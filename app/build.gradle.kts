@@ -32,7 +32,7 @@ plugins {
 
 android {
     compileSdkVersion(29)
-    buildToolsVersion("29.0.3")
+    buildToolsVersion("29.0.2")
 
     defaultConfig {
         targetSdkVersion(29)
