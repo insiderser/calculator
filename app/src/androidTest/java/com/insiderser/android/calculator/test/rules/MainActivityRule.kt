@@ -32,9 +32,7 @@ import com.insiderser.android.calculator.ui.MainActivity
  */
 class MainActivityRule(
     @IdRes private val destination: Int
-) : ActivityTestRule<MainActivity>(
-    MainActivity::class.java
-) {
+) : ActivityTestRule<MainActivity>(MainActivity::class.java) {
 
     override fun getActivityIntent(): Intent = Intent()
         .putExtra(MainActivity.EXTRA_DESTINATION, destination)

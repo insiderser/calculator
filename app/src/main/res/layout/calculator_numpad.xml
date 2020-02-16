@@ -134,7 +134,7 @@
         android:orientation="vertical">
 
         <ImageButton
-            android:id="@+id/button_clear"
+            android:id="@+id/button_backspace"
             style="@style/Widget.Calculator.Numpad.Button"
             android:contentDescription="@string/calculator_numpad_backspace"
             android:src="@drawable/ic_backspace" />

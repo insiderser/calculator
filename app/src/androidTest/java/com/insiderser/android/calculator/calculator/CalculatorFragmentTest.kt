@@ -26,6 +26,7 @@ import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openContextualActionModeOverflowMenu
 import androidx.test.espresso.Espresso.pressBack
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.longClick
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.RootMatchers.isPlatformPopup
 import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
@@ -36,12 +37,12 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.MediumTest
 import com.insiderser.android.calculator.R
 import com.insiderser.android.calculator.test.rules.MainActivityRule
-import com.insiderser.android.calculator.test.rules.TestPreferencesRule
 import org.hamcrest.CoreMatchers.allOf
 import org.hamcrest.CoreMatchers.instanceOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
+import java.util.Locale
 
 @MediumTest
 @RunWith(AndroidJUnit4::class)
@@ -51,13 +52,10 @@ class CalculatorFragmentTest {
     @JvmField
     val activityRule = MainActivityRule(R.id.calculator_dest)
 
-    @Rule
-    @JvmField
-    val preferencesRule = TestPreferencesRule()
-
     @Test
-    fun assert_clickingOnSettingsMenu_navigatesToSettings_then_navigateBack_returnsToCalculatorFragment() {
-        // openActionBarOverflowOrOptionsMenu(...) doesn't pass in CI
+    fun clickingOnSettingsMenu_navigatesToSettings_then_navigateBack_returnsToCalculatorFragment() {
+        checkInCalculatorFragment()
+        // openActionBarOverflowOrOptionsMenu(...) doesn't work in CI
         openContextualActionModeOverflowMenu()
 
         onView(withText(R.string.settings_title))
@@ -70,13 +68,105 @@ class CalculatorFragmentTest {
         checkInCalculatorFragment()
     }
 
+    @Test
+    fun checkArithmetics() {
+        checkEnglishLocale()
+        checkInCalculatorFragment()
+
+        checkDisplayedExpression("")
+        checkDisplayedResult("")
+
+        clickOnViewWithText_thenCheckExpressionAndResult("5", "5", "5")
+        clickOnViewWithText_thenCheckExpressionAndResult("0", "50", "50")
+        clickOnViewWithText_thenCheckExpressionAndResult("×", "50×", "")
+        clickOnViewWithText_thenCheckExpressionAndResult("3", "50×3", "150")
+
+        clickOnBackspace()
+        checkDisplayedExpression("50×")
+        checkDisplayedResult("")
+
+        clickOnBackspace()
+        checkDisplayedExpression("50")
+        checkDisplayedResult("50")
+
+        clickOnViewWithText_thenCheckExpressionAndResult("+", "50+", "")
+        clickOnViewWithText_thenCheckExpressionAndResult("-", "50+-", "")
+        clickOnViewWithText_thenCheckExpressionAndResult("4", "50+-4", "46")
+
+        longClickOnBackspace()
+        checkDisplayedExpression("")
+        checkDisplayedResult("")
+
+        clickOnViewWithText_thenCheckExpressionAndResult("-", "-", "")
+        clickOnViewWithText_thenCheckExpressionAndResult("0", "-0", "0")
+        clickOnViewWithText_thenCheckExpressionAndResult("+", "-0+", "")
+        clickOnViewWithText_thenCheckExpressionAndResult("9", "-0+9", "9")
+        clickOnViewWithText_thenCheckExpressionAndResult(".", "-0+9.", "9")
+        clickOnViewWithText_thenCheckExpressionAndResult("1", "-0+9.1", "9.1")
+        clickOnViewWithText_thenCheckExpressionAndResult("×", "-0+9.1×", "")
+        clickOnViewWithText_thenCheckExpressionAndResult("1", "-0+9.1×1", "9.1")
+        clickOnViewWithText_thenCheckExpressionAndResult(".", "-0+9.1×1.", "9.1")
+        clickOnViewWithText_thenCheckExpressionAndResult("2", "-0+9.1×1.2", "10.92")
+
+        longClickOnBackspace()
+        checkDisplayedExpression("")
+        checkDisplayedResult("")
+
+        clickOnViewWithText_thenCheckExpressionAndResult("1", "1", "1")
+        clickOnViewWithText_thenCheckExpressionAndResult("÷", "1÷", "")
+        clickOnViewWithText_thenCheckExpressionAndResult("0", "1÷0", "")
+    }
+
     private fun checkInSettings() {
         onView(allOf(instanceOf(TextView::class.java), withParent(withId(R.id.toolbar))))
             .check(matches(withText(R.string.settings_title)))
     }
 
     private fun checkInCalculatorFragment() {
+        onView(withText("5")).check(matches(isCompletelyDisplayed()))
         onView(withText("=")).check(matches(isCompletelyDisplayed()))
         onView(withText("÷")).check(matches(isCompletelyDisplayed()))
+    }
+
+    private fun checkEnglishLocale() {
+        if (Locale.getDefault().language != Locale("en").language) {
+            throw IllegalStateException("Cannot test on locales other that English")
+        }
+    }
+
+    private fun clickOnViewWithText_thenCheckExpressionAndResult(
+        viewText: String,
+        expectedExpression: String,
+        expectedResult: String
+    ) {
+        onView(withText(viewText))
+            .check(matches(isCompletelyDisplayed()))
+            .perform(click())
+        checkDisplayedExpression(expectedExpression)
+        checkDisplayedResult(expectedResult)
+    }
+
+    private fun checkDisplayedResult(expectedResult: String) {
+        onView(withId(R.id.result))
+            .check(matches(isCompletelyDisplayed()))
+            .check(matches(withText(expectedResult)))
+    }
+
+    private fun checkDisplayedExpression(expectedExpression: String) {
+        onView(withId(R.id.expression))
+            .check(matches(isCompletelyDisplayed()))
+            .check(matches(withText(expectedExpression)))
+    }
+
+    private fun clickOnBackspace() {
+        onView(withId(R.id.button_backspace))
+            .check(matches(isCompletelyDisplayed()))
+            .perform(click())
+    }
+
+    private fun longClickOnBackspace() {
+        onView(withId(R.id.button_backspace))
+            .check(matches(isCompletelyDisplayed()))
+            .perform(longClick())
     }
 }

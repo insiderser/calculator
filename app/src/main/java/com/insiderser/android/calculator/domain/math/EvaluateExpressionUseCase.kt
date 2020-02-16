@@ -38,7 +38,7 @@ class EvaluateExpressionUseCase @Inject constructor() :
             val result = ExpressionBuilder(param)
                 .operator(FactorialOperator)
                 .build()
-                .evaluate()
+                .evaluate() + 0.0 // This ensures that we don't get -0.0
             require(result.isFinite()) { "Got $result result" }
             return result
         } catch (e: RuntimeException) {
@@ -51,7 +51,7 @@ class EvaluateExpressionUseCase @Inject constructor() :
     }
 }
 
-private object FactorialOperator : Operator("!", 1, false, PRECEDENCE_POWER + 1) {
+private object FactorialOperator : Operator("!", 1, true, PRECEDENCE_POWER + 1) {
     override fun apply(vararg args: Double): Double {
         val arg = args[0]
         require(arg.isInteger()) { "Operand for factorial has to be an integer, was $arg" }

@@ -37,6 +37,7 @@ class EvaluateExpressionUseCaseTest {
         checkExpressionEvaluated("-595", -595)
         checkExpressionEvaluated("0.595", 0.595)
         checkExpressionEvaluated("-59.5", -59.5)
+        checkExpressionEvaluated("-0", 0.0)
 
         checkExpressionEvaluated("3+9+9(-5)", -33)
         checkExpressionEvaluated("3.5*10.4", 36.4)
@@ -58,7 +59,11 @@ class EvaluateExpressionUseCaseTest {
         checkExpressionEvaluated("0!", 1)
         checkExpressionEvaluated("5!", 120)
         checkExpressionEvaluated("-5!", -120)
+        checkExpressionEvaluated("5!+3", 123)
+        checkExpressionEvaluated("3+5!", 123)
+        checkExpressionEvaluated("3!^2", 36)
         checkEvaluateThrowsInvalidExpressionException("5.3!")
+        checkEvaluateThrowsInvalidExpressionException("5!+")
     }
 
     private suspend fun checkExpressionEvaluated(expression: String, expectedResult: Number) {

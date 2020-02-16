@@ -91,12 +91,12 @@ class CalculatorFragment : FragmentWithViewBinding<CalculatorFragmentBinding>() 
                         viewModel.onArithmeticButtonClicked(tag)
                     } else when (button.id) {
                         R.id.button_equal -> viewModel.onEqualButtonClicked()
-                        R.id.button_clear -> viewModel.onClearButtonClicked()
+                        R.id.button_backspace -> viewModel.onClearButtonClicked()
                     }
                 }
             }
 
-        requireBinding().numpad.buttonClear.setOnLongClickListener {
+        requireBinding().numpad.buttonBackspace.setOnLongClickListener {
             consume {
                 viewModel.onClearButtonLongClick()
             }
