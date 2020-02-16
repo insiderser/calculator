@@ -21,20 +21,17 @@
  */
 package com.insiderser.android.calculator.ui.calculator
 
-import android.text.Editable
-import android.text.SpannableStringBuilder
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.insiderser.android.calculator.domain.math.EvaluateExpressionUseCase
 import com.insiderser.android.calculator.domain.math.LocalizeExpressionUseCase
-import com.insiderser.android.calculator.utils.Result
 import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.mapNotNull
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -46,62 +43,43 @@ class CalculatorFragmentViewModel @Inject constructor(
     private val localizeExpressionUseCase: LocalizeExpressionUseCase
 ) : ViewModel() {
 
-    private val expressionChannel = ConflatedBroadcastChannel("")
+    // Why not StringBuffer? Because we want to synchronize on the level
+    // of the whole transformation, not on the level of individual operation.
+    private val _expression = StringBuilder()
+    private val expressionChangedChannel = ConflatedBroadcastChannel(Unit)
 
     /** Localized current expression. */
-    val expression: LiveData<CharSequence> = expressionChannel.asFlow()
-        .mapLatest { expression -> localizeExpressionUseCase(expression) }
-        .buffer(CONFLATED)
+    val expression: LiveData<CharSequence> = expressionChangedChannel.asFlow()
+        .map { localizeExpressionUseCase(_expression.toString()) }
         .asLiveData()
 
     /** The localized result of the current expression. */
-    val expressionResult: LiveData<CharSequence> = expressionChannel.asFlow()
-        .mapLatest { expression -> evaluateExpressionUseCase.executeNow(expression) }
-        .buffer(CONFLATED)
-        .mapNotNull { result ->
-            when (result) {
-                is Result.Success -> localizeExpressionUseCase(result.data)
-                is Result.Error -> {
-                    Timber.i(result.cause)
-                    ""
-                }
-                is Result.Loading -> null
-            }
+    val result: LiveData<CharSequence> = expressionChangedChannel.asFlow()
+        .mapLatest {
+            evaluateExpressionUseCase(_expression.toString())
+                .onFailure { e -> Timber.i(e) }
+                .map { result -> localizeExpressionUseCase(result) }
+                .getOrDefault("")
         }
+        .buffer(CONFLATED)
         .asLiveData()
 
-    fun onArithmeticButtonClicked(tag: String, cursorSelectionStart: Int, cursorSelectionEnd: Int) =
-        updateExpression {
-            replace(cursorSelectionStart, cursorSelectionEnd, tag)
-        }
+    fun onArithmeticButtonClicked(tag: String) = updateExpression { append(tag) }
 
-    fun onEqualButtonClicked() = updateExpression {
-        // TODO
-    }
+    fun onEqualButtonClicked() = updateExpression { /* TODO */ }
 
-    fun onClearButtonClicked(cursorSelectionStart: Int, cursorSelectionEnd: Int) =
-        if (expressionResult.value.isNullOrEmpty()) clearExpression()
-        else deleteSelection(cursorSelectionStart, cursorSelectionEnd)
-
-    private fun deleteSelection(start: Int, end: Int) {
-        updateExpression {
-            if (start != end) {
-                delete(start, end)
-            } else if (start != 0) {
-                delete(start - 1, start)
-            }
+    fun onClearButtonClicked() = updateExpression {
+        if (isNotEmpty()) {
+            delete(lastIndex, length)
         }
     }
 
-    fun onClearButtonLongClick() = clearExpression()
+    fun onClearButtonLongClick() = updateExpression { clear() }
 
-    private fun clearExpression() {
-        updateExpression { clear() }
-    }
-
-    private inline fun updateExpression(transform: Editable.() -> Unit) {
-        val expression = SpannableStringBuilder(expressionChannel.valueOrNull ?: "")
-        transform(expression)
-        expressionChannel.offer(expression.toString())
+    private inline fun updateExpression(crossinline transform: StringBuilder.() -> Unit) {
+        synchronized(_expression) {
+            transform(_expression)
+        }
+        expressionChangedChannel.offer(Unit)
     }
 }

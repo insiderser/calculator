@@ -22,7 +22,7 @@
 <resources>
 
     <dimen name="calculator_display_padding">8dp</dimen>
-    <dimen name="calculator_elevation">8dp</dimen>
+    <dimen name="calculator_elevation">6dp</dimen>
 
     <dimen name="settings_items_alignment_horizontal">32dp</dimen>
     <dimen name="settings_preference_padding_vertical">16dp</dimen>

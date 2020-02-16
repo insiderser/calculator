@@ -62,7 +62,9 @@ class SettingsViewModel @Inject constructor(
      * Set given [theme][Theme] as app's theme.
      */
     fun setSelectedTheme(theme: Theme) {
-        setThemeUseCase(theme)
+        viewModelScope.launch {
+            setThemeUseCase(theme)
+        }
     }
 
     /**

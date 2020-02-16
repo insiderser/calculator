@@ -46,27 +46,36 @@
             app:menu="@menu/calculator_menu"
             app:title="" />
 
-        <EditText
-            android:id="@+id/expression"
-            style="@style/Widget.Calculator.DisplayEditText"
+        <HorizontalScrollView
+            android:id="@+id/expression_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:importantForAutofill="no"
-            android:textAppearance="?attr/textAppearanceHeadline4"
-            tools:ignore="LabelFor"
-            tools:text="1 + (3 sin pi)" />
+            android:scrollbars="none">
 
-        <EditText
-            android:id="@+id/result"
-            style="@style/Widget.Calculator.DisplayEditText"
+            <TextView
+                android:id="@+id/expression"
+                style="@style/Widget.Calculator.DisplayText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:textAppearance="?attr/textAppearanceHeadline4"
+                tools:text="1 + (3 sin pi)" />
+        </HorizontalScrollView>
+
+        <HorizontalScrollView
+            android:id="@+id/result_scroll_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:cursorVisible="false"
-            android:focusable="false"
-            android:importantForAutofill="no"
-            android:textAppearance="?attr/textAppearanceHeadline5"
-            tools:ignore="LabelFor"
-            tools:text="1" />
+            android:scrollbars="none">
+
+            <TextView
+                android:id="@+id/result"
+                style="@style/Widget.Calculator.DisplayText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?attr/textAppearanceHeadline5"
+                tools:text="1" />
+        </HorizontalScrollView>
     </LinearLayout>
 
     <include

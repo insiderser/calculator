@@ -21,35 +21,23 @@
  */
 package com.insiderser.android.calculator.domain.theme
 
-import com.insiderser.android.calculator.data.prefs.AppPreferencesStorage
+import com.google.common.truth.Truth.assertThat
+import com.insiderser.android.calculator.fakes.FakeAppPreferencesStorage
 import com.insiderser.android.calculator.model.Theme
-import io.mockk.MockKAnnotations
-import io.mockk.impl.annotations.RelaxedMockK
-import io.mockk.verify
-import kotlinx.coroutines.test.runBlockingTest
-import org.junit.Before
+import kotlinx.coroutines.runBlocking
 import org.junit.Test
 
 class SetThemeUseCaseTest {
 
-    @RelaxedMockK
-    private lateinit var preferencesStorage: AppPreferencesStorage
-
-    private lateinit var useCase: SetThemeUseCase
-
-    @Before
-    fun setUp() {
-        MockKAnnotations.init(this)
-        useCase = SetThemeUseCase(
-            preferencesStorage
-        )
-    }
+    private val preferencesStorage = FakeAppPreferencesStorage()
+    private val useCase = SetThemeUseCase(preferencesStorage)
 
     @Test
-    fun assert_execute_setsSelectedTheme() = runBlockingTest {
+    fun givenTheme_execute_updatesPreferencesStorage() = runBlocking {
         Theme.values().forEach { theme ->
-            useCase.execute(theme)
-            verify(exactly = 1) { preferencesStorage.selectedTheme = theme.storageKey }
+            val result = useCase(theme)
+            assertThat(result.isSuccess).isTrue()
+            assertThat(preferencesStorage.selectedTheme).isEqualTo(theme.storageKey)
         }
     }
 }

@@ -25,23 +25,21 @@
 
     <style name="Widget.Calculator.AppBar" parent="Widget.MaterialComponents.AppBarLayout.Surface" />
 
-    <style name="Widget.Calculator.DisplayEditText" parent="Widget.AppCompat.EditText">
-        <item name="android:background">@color/transparent</item>
-        <item name="android:gravity">end</item>
-        <item name="android:inputType">none</item>
+    <style name="Widget.Calculator.DisplayText" parent="Widget.MaterialComponents.TextView">
+        <item name="android:layout_gravity">end</item>
         <item name="android:paddingTop">@dimen/calculator_display_padding</item>
         <item name="android:paddingBottom">@dimen/calculator_display_padding</item>
         <item name="android:paddingStart">@dimen/calculator_display_padding</item>
         <item name="android:paddingEnd">@dimen/calculator_display_padding</item>
         <item name="android:lines">1</item>
-        <item name="android:includeFontPadding">false</item>
+        <item name="android:textColor">?attr/colorOnSurface</item>
     </style>
 
     <style name="Widget.Calculator.Numpad.Button" parent="Widget.MaterialComponents.Button.TextButton">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0dp</item>
         <item name="android:layout_weight">1</item>
-        <item name="android:textAppearance">?attr/textAppearanceHeadline3</item>
+        <item name="android:textAppearance">?attr/textAppearanceHeadline4</item>
     </style>
 
     <style name="Widget.Calculator.Settings.PreferenceView" parent="">

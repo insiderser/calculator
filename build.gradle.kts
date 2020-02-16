@@ -58,6 +58,7 @@ subprojects {
 
             freeCompilerArgs = mutableListOf(
                 "-Xjsr305=strict",
+                "-Xallow-result-return-type",
                 "-Xuse-experimental=kotlin.Experimental",
                 "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-Xuse-experimental=kotlinx.coroutines.FlowPreview"

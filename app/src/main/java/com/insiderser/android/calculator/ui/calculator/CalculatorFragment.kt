@@ -23,7 +23,6 @@ package com.insiderser.android.calculator.ui.calculator
 
 import android.content.Context
 import android.os.Bundle
-import android.text.SpannableStringBuilder
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.children
@@ -52,12 +51,6 @@ class CalculatorFragment : FragmentWithViewBinding<CalculatorFragmentBinding>() 
 
     private val viewModel: CalculatorFragmentViewModel by viewModels { viewModelFactory }
 
-    private val expressionCursorSelectionStart: Int
-        get() = requireBinding().expression.selectionStart
-
-    private val expressionCursorPositionEnd: Int
-        get() = requireBinding().expression.selectionEnd
-
     override fun onAttach(context: Context) {
         injector.inject(this)
         super.onAttach(context)
@@ -71,10 +64,6 @@ class CalculatorFragment : FragmentWithViewBinding<CalculatorFragmentBinding>() 
     override fun onBindingCreated(binding: CalculatorFragmentBinding, savedInstanceState: Bundle?) {
         (activity as? NavigationHost)?.registerToolbarWithNavigation(binding.toolbar)
         configureInsets()
-
-        binding.expression.showSoftInputOnFocus = false
-        binding.expression.requestFocus()
-
         configureNumpad()
         observeData()
     }
@@ -99,19 +88,10 @@ class CalculatorFragment : FragmentWithViewBinding<CalculatorFragmentBinding>() 
                 button.setOnClickListener {
                     val tag = button.tag
                     if (tag is String) {
-                        viewModel.onArithmeticButtonClicked(
-                            tag,
-                            expressionCursorSelectionStart,
-                            expressionCursorPositionEnd
-                        )
-                    } else {
-                        when (button.id) {
-                            R.id.button_equal -> viewModel.onEqualButtonClicked()
-                            R.id.button_clear -> viewModel.onClearButtonClicked(
-                                expressionCursorSelectionStart,
-                                expressionCursorPositionEnd
-                            )
-                        }
+                        viewModel.onArithmeticButtonClicked(tag)
+                    } else when (button.id) {
+                        R.id.button_equal -> viewModel.onEqualButtonClicked()
+                        R.id.button_clear -> viewModel.onClearButtonClicked()
                     }
                 }
             }
@@ -125,11 +105,21 @@ class CalculatorFragment : FragmentWithViewBinding<CalculatorFragmentBinding>() 
 
     private fun observeData() {
         viewModel.expression.observe(viewLifecycleOwner) { expression ->
-            requireBinding().expression.text = SpannableStringBuilder.valueOf(expression)
+            requireBinding().expression.run {
+                text = expression
+                post {
+                    requireBinding().expressionScrollView.smoothScrollTo(width, 0)
+                }
+            }
         }
 
-        viewModel.expressionResult.observe(viewLifecycleOwner) { result ->
-            requireBinding().result.text = SpannableStringBuilder.valueOf(result)
+        viewModel.result.observe(viewLifecycleOwner) { result ->
+            requireBinding().result.run {
+                text = result
+                post {
+                    requireBinding().resultScrollView.smoothScrollTo(width, 0)
+                }
+            }
         }
     }
 }

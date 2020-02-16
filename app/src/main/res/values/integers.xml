@@ -22,5 +22,5 @@
 
 <resources>
 
-    <integer name="calculator_numpad_weight">4</integer>
+    <integer name="calculator_numpad_weight">3</integer>
 </resources>

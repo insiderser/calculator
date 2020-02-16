@@ -34,9 +34,9 @@ class LocalizeExpressionUseCase @Inject constructor() {
     init {
         val formatSymbols = DecimalFormatSymbols()
         val replacement = mutableMapOf<String, String>()
+        replacementMap = replacement
 
         replacement["."] = formatSymbols.decimalSeparator.toString()
-        replacement["^"] = formatSymbols.exponentSeparator
         replacement["*"] = "×" // TODO localize ×
         replacement["/"] = "÷" // TODO localize ÷
 
@@ -44,18 +44,13 @@ class LocalizeExpressionUseCase @Inject constructor() {
         for (i in 0..9) {
             replacement[i.toString()] = (zero + i).toString()
         }
-
-        // TODO: add other replacements
-
-        replacementMap = replacement
     }
 
     /**
      * @return Localized representation of the [number][expression].
      */
     operator fun invoke(expression: Double): String =
-        if (expression.isInteger()) invoke(expression.toLong().toString())
-        else invoke(expression.toString())
+        invoke(expression.toString().replace(Regex("""\.0+$"""), ""))
 
     /**
      * @return Localized representation of the [expression].

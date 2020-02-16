@@ -86,7 +86,7 @@
             android:id="@+id/button_decimal_separator"
             style="@style/Widget.Calculator.Numpad.Button"
             android:tag="."
-            android:text="•" />
+            android:text="." />
 
     </LinearLayout>
 
@@ -164,9 +164,5 @@
             android:text="+" />
 
     </LinearLayout>
-
-    <include
-        android:id="@+id/advanced_numpad"
-        layout="@layout/calculator_advanced_pad" />
 
 </LinearLayout>
