@@ -43,10 +43,6 @@ android {
         applicationId = "com.insiderser.android.calculator"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        testInstrumentationRunnerArgument(
-            "listener",
-            "com.insiderser.android.calculator.test.listeners.CrashingRunListener"
-        )
 
         javaCompileOptions {
             annotationProcessorOptions {
