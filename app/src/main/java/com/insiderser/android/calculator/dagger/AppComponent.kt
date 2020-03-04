@@ -26,6 +26,7 @@ import android.content.Context
 import androidx.fragment.app.Fragment
 import com.insiderser.android.calculator.CalculatorApplication
 import com.insiderser.android.calculator.ui.calculator.CalculatorFragment
+import com.insiderser.android.calculator.ui.history.HistoryFragment
 import com.insiderser.android.calculator.ui.settings.SettingsFragment
 import com.insiderser.android.calculator.ui.settings.theme.ThemeSettingDialogFragment
 import dagger.BindsInstance
@@ -51,6 +52,7 @@ interface AppComponent {
 
     fun inject(application: CalculatorApplication)
     fun inject(fragment: CalculatorFragment)
+    fun inject(fragment: HistoryFragment)
     fun inject(fragment: SettingsFragment)
     fun inject(fragment: ThemeSettingDialogFragment)
 

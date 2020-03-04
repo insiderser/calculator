@@ -24,6 +24,7 @@ package com.insiderser.android.calculator.dagger
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.insiderser.android.calculator.ui.calculator.CalculatorFragmentViewModel
+import com.insiderser.android.calculator.ui.history.HistoryViewModel
 import com.insiderser.android.calculator.ui.settings.SettingsViewModel
 import dagger.Binds
 import dagger.Module
@@ -52,4 +53,9 @@ interface MainActivityModule {
     @IntoMap
     @ViewModelKey(CalculatorFragmentViewModel::class)
     fun bindCalculatorFragmentViewModel(vm: CalculatorFragmentViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(HistoryViewModel::class)
+    fun bindHistoryViewModel(vm: HistoryViewModel): ViewModel
 }

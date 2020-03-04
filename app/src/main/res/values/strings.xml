@@ -25,6 +25,8 @@
 
     <string name="calculator_numpad_backspace">Backspace</string>
 
+    <string name="history_title">History</string>
+
     <string name="settings_title">Settings</string>
 
     <string name="settings_theme_group_label">Theme</string>

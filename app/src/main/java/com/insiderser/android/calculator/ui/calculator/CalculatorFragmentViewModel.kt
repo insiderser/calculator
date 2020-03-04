@@ -24,6 +24,8 @@ package com.insiderser.android.calculator.ui.calculator
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
+import androidx.lifecycle.viewModelScope
+import com.insiderser.android.calculator.domain.history.AddExpressionToHistoryUseCase
 import com.insiderser.android.calculator.domain.math.EvaluateExpressionUseCase
 import com.insiderser.android.calculator.domain.math.LocalizeExpressionUseCase
 import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
@@ -32,6 +34,7 @@ import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -40,7 +43,8 @@ import javax.inject.Inject
  */
 class CalculatorFragmentViewModel @Inject constructor(
     private val evaluateExpressionUseCase: EvaluateExpressionUseCase,
-    private val localizeExpressionUseCase: LocalizeExpressionUseCase
+    private val localizeExpressionUseCase: LocalizeExpressionUseCase,
+    private val addExpressionToHistoryUseCase: AddExpressionToHistoryUseCase
 ) : ViewModel() {
 
     // Why not StringBuffer? Because we want to synchronize on the level
@@ -66,7 +70,15 @@ class CalculatorFragmentViewModel @Inject constructor(
 
     fun onArithmeticButtonClicked(tag: String) = updateExpression { append(tag) }
 
-    fun onEqualButtonClicked() = updateExpression { /* TODO */ }
+    fun onEqualButtonClicked() = updateExpression {
+        viewModelScope.launch {
+            if (isNotEmpty()) {
+                addExpressionToHistoryUseCase(this.toString())
+            }
+        }
+
+        /* TODO */
+    }
 
     fun onClearButtonClicked() = updateExpression {
         if (isNotEmpty()) {
