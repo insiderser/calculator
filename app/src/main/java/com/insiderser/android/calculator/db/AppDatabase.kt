@@ -19,15 +19,12 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.insiderser.android.calculator.data.db
+package com.insiderser.android.calculator.db
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.insiderser.android.calculator.BuildConfig.DEBUG
-import com.insiderser.android.calculator.data.db.history.ExpressionsHistoryDao
-import com.insiderser.android.calculator.data.db.history.ExpressionsHistoryEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.asExecutor
 
@@ -64,11 +61,6 @@ abstract class AppDatabase : RoomDatabase() {
         fun create(context: Context): AppDatabase =
             Room.databaseBuilder(context, AppDatabase::class.java, DB_NAME)
                 .setTransactionExecutor(Dispatchers.IO.asExecutor())
-                .apply {
-                    if (DEBUG) {
-                        fallbackToDestructiveMigration()
-                    }
-                }
                 .build()
     }
 }

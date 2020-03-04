@@ -19,14 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.insiderser.android.calculator.data.db.history
+package com.insiderser.android.calculator.db
 
 import androidx.room.Room
 import androidx.room.paging.LimitOffsetDataSource
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
-import com.insiderser.android.calculator.data.db.AppDatabase
+import com.insiderser.android.calculator.test.await
 import kotlinx.coroutines.runBlocking
 import org.junit.After
 import org.junit.Before
@@ -55,44 +55,51 @@ class ExpressionsHistoryDaoTest {
     }
 
     @Test
-    fun givenNewEntityWithId_insertOne_insertsWithThisId() = runBlocking {
+    fun givenNewEntityWithId_insertOne_insertsWithThisId() {
         val id = 6
         val expression = "5 tan π + 6 ^ 3"
+        val result = 216.0
         val time = Date(-67375685)
         val entity = ExpressionsHistoryEntity(
             id = id,
             expression = expression,
+            result = result,
             timeAdded = time
         )
 
         val newId = dao.insertOne(entity)
         assertThat(newId).isEqualTo(id)
 
-        val insertedEntity = dao.findOneById(id)
-        assertThat(insertedEntity).isNotNull()
+        val insertedEntity = dao.findOneById(id).await()
+        checkNotNull(insertedEntity)
         assertThat(insertedEntity.id).isEqualTo(id)
         assertThat(insertedEntity.expression).isEqualTo(expression)
+        assertThat(insertedEntity.result).isEqualTo(result)
         assertThat(insertedEntity.timeAdded).isEqualTo(time)
 
         checkTableContainsExactly(insertedEntity)
     }
 
     @Test
-    fun givenNewEntityWithoutId_insertOne_insertsWithGeneratedId() = runBlocking {
+    fun givenNewEntityWithoutId_insertOne_insertsWithGeneratedId() {
         val expression = "5 tan π + 6 ^ 3"
+        val result = -2.5
         val time = Date(78281612)
         val entity = ExpressionsHistoryEntity(
             id = 0,
             expression = expression,
+            result = result,
             timeAdded = time
         )
 
         val id = dao.insertOne(entity).toInt()
         assertThat(id).isAtLeast(1)
 
-        val insertedEntity = dao.findOneById(id)
+        val insertedEntity = dao.findOneById(id).await()
+        check(insertedEntity != null)
         assertThat(insertedEntity.id).isEqualTo(id)
         assertThat(insertedEntity.expression).isEqualTo(expression)
+        assertThat(insertedEntity.result).isEqualTo(result)
         assertThat(insertedEntity.timeAdded).isEqualTo(time)
 
         checkTableContainsExactly(insertedEntity)
@@ -105,14 +112,15 @@ class ExpressionsHistoryDaoTest {
         dao.insertOne(
             ExpressionsHistoryEntity(
                 id = id,
-                expression = "whatever"
+                expression = "whatever",
+                result = 0.3
             )
         )
         val affectedEntries = dao.deleteOneById(id)
 
         assertThat(affectedEntries).isEqualTo(1)
         checkTableContainsExactly()
-        assertThat(dao.findOneById(id)).isNull()
+        assertThat(dao.findOneById(id).await()).isNull()
     }
 
     @Test
@@ -124,13 +132,13 @@ class ExpressionsHistoryDaoTest {
 
     @Test
     fun givenInsertedEntity_deleteAll_deletesThem() = runBlocking {
-        dao.insertOne(ExpressionsHistoryEntity(id = 5, expression = "whatever"))
-        dao.insertOne(ExpressionsHistoryEntity(id = 6, expression = "whatever"))
-        dao.insertOne(ExpressionsHistoryEntity(id = 7, expression = "whatever"))
-        dao.insertOne(ExpressionsHistoryEntity(id = 8, expression = "whatever"))
+        val n = 6
+        repeat(n) {
+            dao.insertOne(ExpressionsHistoryEntity(id = 5, expression = "whatever", result = -3.5))
+        }
 
         val affectedEntries = dao.deleteAll()
-        assertThat(affectedEntries).isEqualTo(4)
+        assertThat(affectedEntries).isEqualTo(n)
     }
 
     @Test

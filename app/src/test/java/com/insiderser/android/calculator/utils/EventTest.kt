@@ -22,14 +22,13 @@
 package com.insiderser.android.calculator.utils
 
 import com.google.common.truth.Truth.assertThat
-import com.insiderser.android.calculator.test.shared.util.SimpleTestClass
 import org.junit.Test
 
 class EventTest {
 
     @Test
     fun testEvent() {
-        val someClass = SimpleTestClass()
+        val someClass = Any()
         val victim = Event(someClass)
 
         assertThat(victim.hasBeenHandled).isFalse()

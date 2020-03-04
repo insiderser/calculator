@@ -19,8 +19,10 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.insiderser.android.calculator.data.db.history
+package com.insiderser.android.calculator.db
 
+import androidx.annotation.WorkerThread
+import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Insert
@@ -45,7 +47,7 @@ interface ExpressionsHistoryDao {
      * @return Found [ExpressionsHistoryEntity], or `null` if nothing found.
      */
     @Query("SELECT * FROM history WHERE id == :id")
-    suspend fun findOneById(id: Int): ExpressionsHistoryEntity
+    fun findOneById(id: Int): LiveData<ExpressionsHistoryEntity>
 
     /**
      * Insert a single [ExpressionsHistoryEntity] into the database.
@@ -55,20 +57,23 @@ interface ExpressionsHistoryDao {
      *
      * @return The [id][ExpressionsHistoryEntity.id] of the inserted entry, or `-1` if not inserted.
      */
+    @WorkerThread
     @Insert
-    suspend fun insertOne(entity: ExpressionsHistoryEntity): Long
+    fun insertOne(entity: ExpressionsHistoryEntity): Long
 
     /**
      * Delete a single entry whose [id][ExpressionsHistoryEntity.id] matches the parameter `id`.
      * @return How many entries were deleted: `0` or `1`.
      */
+    @WorkerThread
     @Query("DELETE FROM history WHERE id == :id")
-    suspend fun deleteOneById(id: Int): Int
+    fun deleteOneById(id: Int): Int
 
     /**
      * Delete **all** entries in the table. **Be careful here!**
      * @return How many entries were deleted.
      */
+    @WorkerThread
     @Query("DELETE FROM history")
-    suspend fun deleteAll(): Int
+    fun deleteAll(): Int
 }

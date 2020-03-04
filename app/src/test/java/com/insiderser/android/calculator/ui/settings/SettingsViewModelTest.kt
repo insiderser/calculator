@@ -28,7 +28,7 @@ import com.insiderser.android.calculator.domain.theme.ObservableThemeUseCase
 import com.insiderser.android.calculator.domain.theme.SetThemeUseCase
 import com.insiderser.android.calculator.fakes.FakeAppPreferencesStorage
 import com.insiderser.android.calculator.model.Theme
-import com.insiderser.android.calculator.test.shared.util.await
+import com.insiderser.android.calculator.test.await
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext

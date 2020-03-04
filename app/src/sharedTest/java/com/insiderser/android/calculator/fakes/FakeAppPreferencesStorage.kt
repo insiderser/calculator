@@ -22,7 +22,7 @@
 package com.insiderser.android.calculator.fakes
 
 import androidx.annotation.RestrictTo
-import com.insiderser.android.calculator.data.prefs.AppPreferencesStorage
+import com.insiderser.android.calculator.data.AppPreferencesStorage
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow

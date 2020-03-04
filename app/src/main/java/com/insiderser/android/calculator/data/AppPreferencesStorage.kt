@@ -19,14 +19,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.insiderser.android.calculator.data.prefs
+package com.insiderser.android.calculator.data
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.annotation.WorkerThread
-import com.insiderser.android.calculator.data.prefs.delegate.StringPreference
+import androidx.core.content.edit
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
@@ -34,8 +34,11 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.properties.ReadWriteProperty
+import kotlin.reflect.KProperty
 
 /**
  * Storage for app's and user's preferences.
@@ -98,5 +101,30 @@ class AppPreferencesStorageImpl @Inject constructor(context: Context) : AppPrefe
         const val PREFS_NAME = "preferences"
 
         const val KEY_THEME = "selected_theme"
+    }
+}
+
+/**
+ * Property delegate that manages a single entry in [SharedPreferences].
+ *
+ * **Note**: all get operations are done synchronously on the calling thread.
+ * Make sure to call it on a worker thread.
+ */
+class StringPreference(
+    private val sharedPreferences: Lazy<SharedPreferences>,
+    private val preferenceKey: String,
+    private val defaultValue: String? = null
+) : ReadWriteProperty<Any, String?> {
+
+    @WorkerThread
+    override fun getValue(thisRef: Any, property: KProperty<*>): String? =
+        sharedPreferences.value.getString(preferenceKey, defaultValue)
+
+    @WorkerThread
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: String?) {
+        Timber.v("Changing value of property with key $preferenceKey to $value")
+        sharedPreferences.value.edit(commit = true) {
+            putString(preferenceKey, value)
+        }
     }
 }

@@ -19,10 +19,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.insiderser.android.calculator.test.shared.util
 
-/**
- * Simple class that has no fields, parameters or subclasses
- * other than that inherited from [Any] class.
- */
-class SimpleTestClass
+package com.insiderser.android.calculator.data
+
+import androidx.annotation.WorkerThread
+import androidx.lifecycle.LiveData
+import androidx.paging.DataSource
+import com.insiderser.android.calculator.db.ExpressionsHistoryDao
+import com.insiderser.android.calculator.db.ExpressionsHistoryEntity
+import javax.inject.Inject
+
+class HistoryRepository @Inject constructor(
+    private val historyDao: ExpressionsHistoryDao
+) {
+
+    fun getAll(): DataSource.Factory<Int, ExpressionsHistoryEntity> = historyDao.findAll()
+
+    fun getById(id: Int): LiveData<ExpressionsHistoryEntity> = historyDao.findOneById(id)
+
+    @WorkerThread
+    fun add(history: ExpressionsHistoryEntity) {
+        historyDao.insertOne(history)
+    }
+
+    @WorkerThread
+    fun remove(id: Int) {
+        historyDao.deleteOneById(id)
+    }
+
+    @WorkerThread
+    fun removeAll() {
+        historyDao.deleteAll()
+    }
+}

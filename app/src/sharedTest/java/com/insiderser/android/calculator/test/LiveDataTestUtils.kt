@@ -19,36 +19,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.insiderser.android.calculator.data.prefs.delegate
+package com.insiderser.android.calculator.test
 
-import android.content.SharedPreferences
-import androidx.annotation.WorkerThread
-import androidx.core.content.edit
-import timber.log.Timber
-import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KProperty
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.Observer
+import java.util.concurrent.CountDownLatch
+import java.util.concurrent.TimeUnit
 
 /**
- * Property delegate that manages a single entry in [SharedPreferences].
- *
- * **Note**: all get operations are done synchronously on the calling thread.
- * Make sure to call it on a worker thread.
+ * Get the value of a [LiveData] safely.
  */
-class StringPreference(
-    private val sharedPreferences: Lazy<SharedPreferences>,
-    private val preferenceKey: String,
-    private val defaultValue: String? = null
-) : ReadWriteProperty<Any, String?> {
-
-    @WorkerThread
-    override fun getValue(thisRef: Any, property: KProperty<*>): String? =
-        sharedPreferences.value.getString(preferenceKey, defaultValue)
-
-    @WorkerThread
-    override fun setValue(thisRef: Any, property: KProperty<*>, value: String?) {
-        Timber.v("Changing value of property with key $preferenceKey to $value")
-        sharedPreferences.value.edit(commit = true) {
-            putString(preferenceKey, value)
+@Throws(InterruptedException::class)
+fun <T> LiveData<T>.await(): T? {
+    var data: T? = null
+    val latch = CountDownLatch(1)
+    val observer = object : Observer<T> {
+        override fun onChanged(o: T?) {
+            data = o
+            latch.countDown()
+            removeObserver(this)
         }
     }
+    observeForever(observer)
+    latch.await(2, TimeUnit.SECONDS)
+
+    return data
 }

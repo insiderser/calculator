@@ -22,10 +22,10 @@
 package com.insiderser.android.calculator.dagger
 
 import android.content.Context
-import com.insiderser.android.calculator.data.db.AppDatabase
-import com.insiderser.android.calculator.data.db.history.ExpressionsHistoryDao
-import com.insiderser.android.calculator.data.prefs.AppPreferencesStorage
-import com.insiderser.android.calculator.data.prefs.AppPreferencesStorageImpl
+import com.insiderser.android.calculator.data.AppPreferencesStorage
+import com.insiderser.android.calculator.data.AppPreferencesStorageImpl
+import com.insiderser.android.calculator.db.AppDatabase
+import com.insiderser.android.calculator.db.ExpressionsHistoryDao
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -46,10 +46,10 @@ abstract class DataModule {
         @Singleton
         @Provides
         @JvmStatic
-        fun provideMyDao(db: AppDatabase): ExpressionsHistoryDao = db.historyDao
+        fun provideHistoryDao(db: AppDatabase): ExpressionsHistoryDao = db.historyDao
     }
 
     @Singleton
     @Binds
-    abstract fun bindAppPreferencesStorage(impl: AppPreferencesStorageImpl): AppPreferencesStorage
+    abstract fun bindAppPreferencesStorageImpl(impl: AppPreferencesStorageImpl): AppPreferencesStorage
 }

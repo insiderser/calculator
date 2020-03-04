@@ -21,7 +21,7 @@
  */
 package com.insiderser.android.calculator.domain.theme
 
-import com.insiderser.android.calculator.data.prefs.AppPreferencesStorage
+import com.insiderser.android.calculator.data.AppPreferencesStorage
 import com.insiderser.android.calculator.domain.ObservableUseCase
 import com.insiderser.android.calculator.model.Theme
 import kotlinx.coroutines.Dispatchers

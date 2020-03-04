@@ -19,28 +19,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.insiderser.android.calculator.data.db.history
+package com.insiderser.android.calculator.model
 
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import androidx.room.TypeConverter
-import androidx.room.TypeConverters
 import java.util.Date
 
-@Entity(tableName = "history")
-@TypeConverters(DateTypeConverter::class)
-data class ExpressionsHistoryEntity(
+data class HistoryItem(
+    val id: Int,
     val expression: String,
-    @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val timeAdded: Date = Date(System.currentTimeMillis())
+    val result: String,
+    val dateAdded: Date
 )
-
-object DateTypeConverter {
-    @TypeConverter
-    @JvmStatic
-    fun fromTimestamp(date: Date?): Long? = date?.time
-
-    @TypeConverter
-    @JvmStatic
-    fun dateToTimestamp(time: Long?): Date? = time?.let { Date(it) }
-}
