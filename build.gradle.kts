@@ -27,13 +27,12 @@ buildscript {
     repositories {
         google()
         jcenter()
-        mavenCentral()
         maven("https://jitpack.io")
     }
     dependencies {
-        classpath(com.insiderser.android.calculator.buildSrc.Libs.androidGradlePlugin)
-        classpath(com.insiderser.android.calculator.buildSrc.Libs.Kotlin.gradlePlugin)
-        classpath(com.insiderser.android.calculator.buildSrc.Libs.AndroidX.Navigation.safeArgs)
+        classpath("com.android.tools.build:gradle:3.6.1")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.70")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.2.1")
     }
 }
 
@@ -45,7 +44,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        mavenCentral()
         maven("https://jitpack.io")
     }
 }
@@ -59,7 +57,7 @@ subprojects {
             freeCompilerArgs = mutableListOf(
                 "-Xjsr305=strict",
                 "-Xallow-result-return-type",
-                "-Xuse-experimental=kotlin.Experimental",
+                "-Xopt-in=kotlin.RequiresOptIn",
                 "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
                 "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
             )

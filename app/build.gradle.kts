@@ -20,8 +20,6 @@
  * SOFTWARE.
  */
 
-import com.insiderser.android.calculator.buildSrc.Libs
-
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -107,56 +105,54 @@ fun DependencyHandler.sharedTestImplementation(dependencyNotation: String) {
 }
 
 dependencies {
-    implementation(Libs.Kotlin.stdlib)
-    implementation(Libs.Kotlin.Coroutines.core)
-    implementation(Libs.Kotlin.Coroutines.android)
-    testImplementation(Libs.Kotlin.Coroutines.test)
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.70")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.3")
 
-    implementation(Libs.AndroidX.coreKtx)
-    implementation(Libs.AndroidX.appcompat)
-    implementation(Libs.AndroidX.constraintLayout)
+    implementation("androidx.core:core-ktx:1.2.0")
+    implementation("androidx.appcompat:appcompat:1.1.0")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta4")
+    implementation("androidx.recyclerview:recyclerview:1.1.0")
 
-    implementation(Libs.AndroidX.Lifecycle.extensions)
-    implementation(Libs.AndroidX.Lifecycle.lifecycleKtx)
-    implementation(Libs.AndroidX.Lifecycle.liveDataKtx)
-    implementation(Libs.AndroidX.Lifecycle.viewModelKtx)
-    implementation(Libs.AndroidX.Lifecycle.savedState)
+    implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.2.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.2.0")
 
-    implementation(Libs.AndroidX.material)
-    implementation(Libs.AndroidX.Activity.activity)
-    implementation(Libs.AndroidX.Fragment.fragment)
-    debugImplementation(Libs.AndroidX.Fragment.testing)
+    implementation("com.google.android.material:material:1.1.0")
+    implementation("androidx.activity:activity-ktx:1.1.0")
+    implementation("androidx.fragment:fragment-ktx:1.2.2")
+    debugImplementation("androidx.fragment:fragment-testing:1.2.2")
 
-    implementation(Libs.AndroidX.Navigation.ui)
-    implementation(Libs.AndroidX.Navigation.fragment)
+    implementation("androidx.navigation:navigation-ui-ktx:2.2.1")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.2.1")
 
-    implementation(Libs.AndroidX.Room.common)
-    implementation(Libs.AndroidX.Room.ktx)
-    implementation(Libs.AndroidX.Room.runtime)
-    kapt(Libs.AndroidX.Room.compiler)
+    implementation("androidx.room:room-ktx:2.2.4")
+    implementation("androidx.room:room-runtime:2.2.4")
+    kapt("androidx.room:room-compiler:2.2.4")
 
-    implementation(Libs.AndroidX.Paging.runtime)
+    implementation("androidx.paging:paging-runtime-ktx:2.1.1")
 
-    implementation(Libs.timber)
-    implementation(Libs.Insetter.ktx)
-    implementation(Libs.exp4j)
+    implementation("com.jakewharton.timber:timber:4.7.1")
+    implementation("dev.chrisbanes:insetter-ktx:0.2.1")
+    implementation("net.objecthunter:exp4j:0.4.8")
 
-    implementation(Libs.Dagger.dagger)
-    kapt(Libs.Dagger.compiler)
+    implementation("com.google.dagger:dagger:2.26")
+    kapt("com.google.dagger:dagger-compiler:2.26")
 
-    debugImplementation(Libs.leakCanary)
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.2")
 
-    sharedTestImplementation(Libs.Test.junit4)
-    sharedTestImplementation(Libs.Test.truth)
-    testImplementation(Libs.Test.mockK)
+    sharedTestImplementation("junit:junit:4.13")
+    sharedTestImplementation("com.google.truth:truth:1.0.1")
+    testImplementation("io.mockk:mockk:1.9.3")
 
-    sharedTestImplementation(Libs.Test.AndroidX.core)
-    sharedTestImplementation(Libs.Test.AndroidX.runner)
-    sharedTestImplementation(Libs.Test.AndroidX.rules)
-    sharedTestImplementation(Libs.Test.AndroidX.ext)
-    sharedTestImplementation(Libs.Test.AndroidX.arch)
+    sharedTestImplementation("androidx.test:core:1.2.0")
+    sharedTestImplementation("androidx.test:runner:1.2.0")
+    sharedTestImplementation("androidx.test:rules:1.2.0")
+    sharedTestImplementation("androidx.test.ext:junit:1.1.1")
+    sharedTestImplementation("androidx.arch.core:core-testing:2.1.0")
 
-    testImplementation(Libs.Test.Robolectric.robolectric)
-    androidTestImplementation(Libs.Test.AndroidX.Espresso.core)
-    androidTestImplementation(Libs.Test.AndroidX.Espresso.intents)
+    testImplementation("org.robolectric:robolectric:4.3.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
 }
