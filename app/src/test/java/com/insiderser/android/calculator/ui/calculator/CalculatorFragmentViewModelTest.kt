@@ -24,11 +24,15 @@ package com.insiderser.android.calculator.ui.calculator
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
+import com.insiderser.android.calculator.data.HistoryRepository
+import com.insiderser.android.calculator.db.ExpressionsHistoryDao
+import com.insiderser.android.calculator.domain.history.AddExpressionToHistoryUseCase
 import com.insiderser.android.calculator.domain.math.EvaluateExpressionUseCase
 import com.insiderser.android.calculator.domain.math.LocalizeExpressionUseCase
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
+import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.newSingleThreadContext
@@ -51,6 +55,9 @@ class CalculatorFragmentViewModelTest {
     @MockK
     private lateinit var localizeExpressionUseCase: LocalizeExpressionUseCase
 
+    @RelaxedMockK
+    private lateinit var historyDao: ExpressionsHistoryDao
+
     private lateinit var viewModel: CalculatorFragmentViewModel
 
     // 1 for expression & 1 for result
@@ -70,7 +77,11 @@ class CalculatorFragmentViewModelTest {
 
         viewModel = CalculatorFragmentViewModel(
             EvaluateExpressionUseCase(),
-            localizeExpressionUseCase
+            localizeExpressionUseCase,
+            AddExpressionToHistoryUseCase(
+                HistoryRepository(historyDao),
+                EvaluateExpressionUseCase()
+            )
         )
         viewModel.expression.observeForever {
             latch.countDown()
