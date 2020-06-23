@@ -90,12 +90,6 @@ android {
         }
     }
 
-    lintOptions {
-        isWarningsAsErrors = true
-        isAbortOnError = true
-        setLintConfig(rootProject.file("lint.xml"))
-    }
-
     testOptions {
         animationsDisabled = true
         unitTests.isIncludeAndroidResources = true
