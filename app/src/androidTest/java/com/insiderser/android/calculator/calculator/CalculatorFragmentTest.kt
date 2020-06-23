@@ -130,7 +130,7 @@ class CalculatorFragmentTest {
 
     private fun checkEnglishLocale() {
         if (Locale.getDefault().language != Locale("en").language) {
-            throw IllegalStateException("Cannot test on locales other that English")
+            throw IllegalStateException("Cannot test on locales other than English")
         }
     }
 
