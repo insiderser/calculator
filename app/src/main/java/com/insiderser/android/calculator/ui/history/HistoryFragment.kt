@@ -25,24 +25,26 @@ package com.insiderser.android.calculator.ui.history
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.updatePadding
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import com.insiderser.android.calculator.dagger.injector
 import com.insiderser.android.calculator.databinding.HistoryFragmentBinding
-import com.insiderser.android.calculator.ui.FragmentWithViewBinding
 import com.insiderser.android.calculator.ui.NavigationHost
-import dev.chrisbanes.insetter.doOnApplyWindowInsets
+import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import javax.inject.Inject
 
-class HistoryFragment : FragmentWithViewBinding<HistoryFragmentBinding>() {
+class HistoryFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val viewModel: HistoryViewModel by viewModels { viewModelFactory }
+
+    private lateinit var binding: HistoryFragmentBinding
 
     private val historyAdapter: HistoryListAdapter by lazy { HistoryListAdapter() }
 
@@ -51,27 +53,23 @@ class HistoryFragment : FragmentWithViewBinding<HistoryFragmentBinding>() {
         super.onAttach(context)
     }
 
-    override fun onCreateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): HistoryFragmentBinding = HistoryFragmentBinding.inflate(inflater)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+        HistoryFragmentBinding.inflate(inflater, container, false).also {
+            binding = it
+        }.root
 
-    override fun onBindingCreated(binding: HistoryFragmentBinding, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (activity as? NavigationHost)?.registerToolbarWithNavigation(binding.toolbar)
 
-        binding.appBar.doOnApplyWindowInsets { view, insets, initial ->
-            view.updatePadding(top = initial.paddings.top + insets.systemWindowInsetTop)
-        }
+        binding.appBar.applySystemWindowInsetsToPadding(top = true)
 
         with(binding.historyList) {
             setHasFixedSize(true)
             adapter = historyAdapter
 
-            doOnApplyWindowInsets { view, insets, initial ->
-                view.updatePadding(bottom = initial.paddings.bottom + insets.systemWindowInsetBottom)
-            }
+            applySystemWindowInsetsToPadding(bottom = true)
         }
 
-        viewModel.history.observe(viewLifecycleOwner, historyAdapter::submitList)
+        viewModel.history.observe(viewLifecycleOwner) { historyAdapter.submitList(it) }
     }
 }

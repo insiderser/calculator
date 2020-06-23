@@ -24,44 +24,45 @@ package com.insiderser.android.calculator.ui.calculator
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
-import androidx.core.view.updateLayoutParams
-import androidx.core.view.updateMargins
-import androidx.core.view.updatePadding
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import com.insiderser.android.calculator.R
 import com.insiderser.android.calculator.dagger.injector
 import com.insiderser.android.calculator.databinding.CalculatorFragmentBinding
-import com.insiderser.android.calculator.ui.FragmentWithViewBinding
 import com.insiderser.android.calculator.ui.NavigationHost
 import com.insiderser.android.calculator.utils.extensions.consume
-import dev.chrisbanes.insetter.doOnApplyWindowInsets
+import dev.chrisbanes.insetter.applySystemWindowInsetsToMargin
+import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import javax.inject.Inject
 
 /**
  * Main fragment that allows user to calculate mathematical expressions.
  */
-class CalculatorFragment : FragmentWithViewBinding<CalculatorFragmentBinding>() {
+class CalculatorFragment : Fragment() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     private val viewModel: CalculatorFragmentViewModel by viewModels { viewModelFactory }
 
+    private lateinit var binding: CalculatorFragmentBinding
+
     override fun onAttach(context: Context) {
         injector.inject(this)
         super.onAttach(context)
     }
 
-    override fun onCreateBinding(
-        inflater: LayoutInflater,
-        container: ViewGroup?
-    ): CalculatorFragmentBinding = CalculatorFragmentBinding.inflate(inflater, container, false)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
+        CalculatorFragmentBinding.inflate(inflater, container, false).also {
+            binding = it
+        }.root
 
-    override fun onBindingCreated(binding: CalculatorFragmentBinding, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (activity as? NavigationHost)?.registerToolbarWithNavigation(binding.toolbar)
         configureInsets()
         configureNumpad()
@@ -69,19 +70,12 @@ class CalculatorFragment : FragmentWithViewBinding<CalculatorFragmentBinding>() 
     }
 
     private fun configureInsets() {
-        requireBinding().toolbar.doOnApplyWindowInsets { view, insets, initial ->
-            view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-                updateMargins(top = initial.margins.top + insets.systemWindowInsetTop)
-            }
-        }
-
-        requireBinding().numpad.root.doOnApplyWindowInsets { view, insets, initial ->
-            view.updatePadding(bottom = initial.paddings.bottom + insets.systemWindowInsetBottom)
-        }
+        binding.toolbar.applySystemWindowInsetsToMargin(top = true)
+        binding.numpad.root.applySystemWindowInsetsToPadding(bottom = true)
     }
 
     private fun configureNumpad() {
-        (requireBinding().numpad.root as ViewGroup).children
+        (binding.numpad.root as ViewGroup).children
             .mapNotNull { it as? ViewGroup }
             .flatMap { it.children }
             .forEach { button ->
@@ -96,7 +90,7 @@ class CalculatorFragment : FragmentWithViewBinding<CalculatorFragmentBinding>() 
                 }
             }
 
-        requireBinding().numpad.buttonBackspace.setOnLongClickListener {
+        binding.numpad.buttonBackspace.setOnLongClickListener {
             consume {
                 viewModel.onClearButtonLongClick()
             }
@@ -105,19 +99,19 @@ class CalculatorFragment : FragmentWithViewBinding<CalculatorFragmentBinding>() 
 
     private fun observeData() {
         viewModel.expression.observe(viewLifecycleOwner) { expression ->
-            requireBinding().expression.run {
+            binding.expression.run {
                 text = expression
                 post {
-                    requireBinding().expressionScrollView.smoothScrollTo(width, 0)
+                    binding.expressionScrollView.smoothScrollTo(width, 0)
                 }
             }
         }
 
         viewModel.result.observe(viewLifecycleOwner) { result ->
-            requireBinding().result.run {
+            binding.result.run {
                 text = result
                 post {
-                    requireBinding().resultScrollView.smoothScrollTo(width, 0)
+                    binding.resultScrollView.smoothScrollTo(width, 0)
                 }
             }
         }
