@@ -37,6 +37,7 @@ import com.insiderser.android.calculator.model.findTitleForTheme
 import com.insiderser.android.calculator.ui.NavigationHost
 import com.insiderser.android.calculator.ui.settings.theme.ThemeSettingDialogFragment
 import com.insiderser.android.calculator.utils.observeEvent
+import com.insiderser.android.calculator.utils.viewLifecycleScoped
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import javax.inject.Inject
 
@@ -51,7 +52,7 @@ class SettingsFragment : Fragment() {
 
     private val viewModel: SettingsViewModel by viewModels { viewModelFactory }
 
-    private lateinit var binding: SettingsFragmentBinding
+    private var binding: SettingsFragmentBinding by viewLifecycleScoped()
 
     override fun onAttach(context: Context) {
         injector.inject(this)

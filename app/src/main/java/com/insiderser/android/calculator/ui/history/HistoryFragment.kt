@@ -34,6 +34,7 @@ import androidx.lifecycle.observe
 import com.insiderser.android.calculator.dagger.injector
 import com.insiderser.android.calculator.databinding.HistoryFragmentBinding
 import com.insiderser.android.calculator.ui.NavigationHost
+import com.insiderser.android.calculator.utils.viewLifecycleScoped
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import javax.inject.Inject
 
@@ -44,7 +45,7 @@ class HistoryFragment : Fragment() {
 
     private val viewModel: HistoryViewModel by viewModels { viewModelFactory }
 
-    private lateinit var binding: HistoryFragmentBinding
+    private var binding: HistoryFragmentBinding by viewLifecycleScoped()
 
     private val historyAdapter: HistoryListAdapter by lazy { HistoryListAdapter() }
 

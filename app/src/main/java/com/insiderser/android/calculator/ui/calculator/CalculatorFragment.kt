@@ -36,6 +36,7 @@ import com.insiderser.android.calculator.dagger.injector
 import com.insiderser.android.calculator.databinding.CalculatorFragmentBinding
 import com.insiderser.android.calculator.ui.NavigationHost
 import com.insiderser.android.calculator.utils.consume
+import com.insiderser.android.calculator.utils.viewLifecycleScoped
 import dev.chrisbanes.insetter.applySystemWindowInsetsToMargin
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import javax.inject.Inject
@@ -50,7 +51,7 @@ class CalculatorFragment : Fragment() {
 
     private val viewModel: CalculatorFragmentViewModel by viewModels { viewModelFactory }
 
-    private lateinit var binding: CalculatorFragmentBinding
+    private var binding: CalculatorFragmentBinding by viewLifecycleScoped()
 
     override fun onAttach(context: Context) {
         injector.inject(this)
