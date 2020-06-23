@@ -19,7 +19,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.insiderser.android.calculator.utils.extensions
+package com.insiderser.android.calculator.utils
 
 /**
  * Convenience method for callbacks/listeners whose return value indicates

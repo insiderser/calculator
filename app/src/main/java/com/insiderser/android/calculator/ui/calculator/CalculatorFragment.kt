@@ -35,7 +35,7 @@ import com.insiderser.android.calculator.R
 import com.insiderser.android.calculator.dagger.injector
 import com.insiderser.android.calculator.databinding.CalculatorFragmentBinding
 import com.insiderser.android.calculator.ui.NavigationHost
-import com.insiderser.android.calculator.utils.extensions.consume
+import com.insiderser.android.calculator.utils.consume
 import dev.chrisbanes.insetter.applySystemWindowInsetsToMargin
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import javax.inject.Inject

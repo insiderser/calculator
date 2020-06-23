@@ -40,9 +40,9 @@ class EventObserverTest {
         val liveData = MutableLiveData(someEvent)
 
         var called = false
-        val victim = EventObserver<Any> {
+        val victim = EventObserver<Any> { content ->
             assertThat(called).isFalse() // Check not called multiple times
-            assertThat(it).isSameInstanceAs(someTestClass)
+            assertThat(content).isSameInstanceAs(someTestClass)
             called = true
         }
 

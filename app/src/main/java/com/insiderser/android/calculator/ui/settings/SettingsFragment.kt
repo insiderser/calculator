@@ -36,7 +36,7 @@ import com.insiderser.android.calculator.databinding.SettingsFragmentBinding
 import com.insiderser.android.calculator.model.findTitleForTheme
 import com.insiderser.android.calculator.ui.NavigationHost
 import com.insiderser.android.calculator.ui.settings.theme.ThemeSettingDialogFragment
-import com.insiderser.android.calculator.utils.extensions.observeEvent
+import com.insiderser.android.calculator.utils.observeEvent
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import javax.inject.Inject
 

@@ -22,13 +22,15 @@
 package com.insiderser.android.calculator.utils
 
 import androidx.annotation.VisibleForTesting
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 
 /**
  * Used as a wrapper for data that is exposed via [androidx.lifecycle.LiveData]
  * that represents an event.
  */
-class Event<out T : Any>(private val content: T) {
+class Event<out Content : Any>(private val content: Content) {
 
     /**
      * `false` if [getContentIfNotHandled] was never called, `true` otherwise.
@@ -41,7 +43,7 @@ class Event<out T : Any>(private val content: T) {
      *
      * If the content has been handled, this returns `null`.
      */
-    fun getContentIfNotHandled(): T? {
+    fun getContentIfNotHandled(): Content? {
         return if (!hasBeenHandled) {
             hasBeenHandled = true
             content
@@ -62,14 +64,25 @@ class Event<out T : Any>(private val content: T) {
  * @param onEventUnhandledCallback invoked only if the [Event]'s content
  * hasn't been handled.
  */
-class EventObserver<T : Any>(
-    private val onEventUnhandledCallback: (T) -> Unit
-) : Observer<Event<T>> {
+class EventObserver<Content : Any>(
+    private val onEventUnhandledCallback: (Content) -> Unit
+) : Observer<Event<Content>> {
 
-    override fun onChanged(event: Event<T>?) {
+    override fun onChanged(event: Event<Content>?) {
         val content = event?.getContentIfNotHandled()
         if (content != null) {
             onEventUnhandledCallback(content)
         }
     }
+}
+
+/**
+ * @see EventObserver
+ * @see LiveData.observe
+ */
+inline fun <T : Any> LiveData<Event<T>>.observeEvent(
+    owner: LifecycleOwner,
+    crossinline onChanged: (T) -> Unit
+) {
+    observe(owner, EventObserver { t -> onChanged(t) })
 }
