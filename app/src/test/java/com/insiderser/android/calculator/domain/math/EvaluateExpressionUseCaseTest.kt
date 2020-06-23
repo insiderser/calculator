@@ -22,16 +22,19 @@
 package com.insiderser.android.calculator.domain.math
 
 import com.google.common.truth.Truth.assertThat
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 import kotlin.math.sqrt
 
 class EvaluateExpressionUseCaseTest {
 
-    private val evaluator = EvaluateExpressionUseCase()
+    private val testDispatcher = TestCoroutineDispatcher()
+
+    private val evaluator = EvaluateExpressionUseCase(testDispatcher)
 
     @Test
-    fun givenExpression_evaluate_evaluatesExpression() = runBlocking {
+    fun givenExpression_evaluate_evaluatesExpression() = testDispatcher.runBlockingTest {
         checkExpressionEvaluated("3", 3)
         checkExpressionEvaluated("+99999999", 99999999)
         checkExpressionEvaluated("-595", -595)
@@ -68,12 +71,16 @@ class EvaluateExpressionUseCaseTest {
 
     private suspend fun checkExpressionEvaluated(expression: String, expectedResult: Number) {
         val result = evaluator(expression)
-        assertThat(result.getOrThrow()).isWithin(0.01).of(expectedResult.toDouble())
+        assertThat(result.getOrThrow()).isWithin(PRECISION).of(expectedResult.toDouble())
     }
 
     private suspend fun checkEvaluateThrowsInvalidExpressionException(expression: String) {
         val result = evaluator(expression)
         assertThat(result.isFailure)
         assertThat(result.exceptionOrNull()).isInstanceOf(InvalidExpressionException::class.java)
+    }
+
+    companion object {
+        private const val PRECISION = 0.01
     }
 }

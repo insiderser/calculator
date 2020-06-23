@@ -26,16 +26,11 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
 
 /**
- * Executes business logic asynchronously.
- *
- * @param coroutineDispatcher Dispatcher that [execute] will be called on.
- * @param P Type of parameter that will be passed to [execute] function.
- * @param R Type that will be returned, wrapped in `Flow<Result<R>>`.
- * @see kotlinx.coroutines.Dispatchers
+ * Executes a single unit of business logic asynchronously.
  */
-abstract class UseCase<in P, R>(
-    private val coroutineDispatcher: CoroutineDispatcher
-) {
+abstract class UseCase<in P, R> {
+
+    abstract val coroutineDispatcher: CoroutineDispatcher
 
     /**
      * Execute this use case with the given params. Can be called on any thread.
@@ -53,7 +48,6 @@ abstract class UseCase<in P, R>(
      *
      * Execution is considered successful if it returns without any [Exception].
      */
-    @Throws(Exception::class)
     protected abstract suspend fun execute(param: P): R
 }
 

@@ -24,16 +24,19 @@ package com.insiderser.android.calculator.domain.theme
 import com.google.common.truth.Truth.assertThat
 import com.insiderser.android.calculator.fakes.FakeAppPreferencesStorage
 import com.insiderser.android.calculator.model.Theme
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
 
 class SetThemeUseCaseTest {
 
+    private val testDispatcher = TestCoroutineDispatcher()
+
     private val preferencesStorage = FakeAppPreferencesStorage()
-    private val useCase = SetThemeUseCase(preferencesStorage)
+    private val useCase = SetThemeUseCase(preferencesStorage, testDispatcher)
 
     @Test
-    fun givenTheme_execute_updatesPreferencesStorage() = runBlocking {
+    fun givenTheme_execute_updatesPreferencesStorage() = testDispatcher.runBlockingTest {
         Theme.values().forEach { theme ->
             val result = useCase(theme)
             assertThat(result.isSuccess).isTrue()

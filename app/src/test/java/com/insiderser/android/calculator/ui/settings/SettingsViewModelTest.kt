@@ -31,8 +31,9 @@ import com.insiderser.android.calculator.model.Theme
 import com.insiderser.android.calculator.test.await
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ObsoleteCoroutinesApi
-import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
@@ -41,6 +42,7 @@ import org.junit.Test
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
+@Suppress("BlockingMethodInNonBlockingContext")
 @OptIn(ObsoleteCoroutinesApi::class)
 class SettingsViewModelTest {
 
@@ -52,26 +54,25 @@ class SettingsViewModelTest {
 
     private lateinit var viewModel: SettingsViewModel
 
-    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
+    private val testDispatcher = TestCoroutineDispatcher()
 
     @Before
     fun setUp() {
-        Dispatchers.setMain(mainThreadSurrogate)
+        Dispatchers.setMain(testDispatcher)
         viewModel = SettingsViewModel(
             GetAvailableThemesUseCase(),
-            ObservableThemeUseCase(storage),
-            SetThemeUseCase(storage)
+            ObservableThemeUseCase(storage, testDispatcher),
+            SetThemeUseCase(storage, testDispatcher)
         )
     }
 
     @After
     fun tearDown() {
         Dispatchers.resetMain()
-        mainThreadSurrogate.close()
     }
 
     @Test
-    fun assert_onThemeSettingClicked_triggersShowThemeSettingDialogEvent() {
+    fun assert_onThemeSettingClicked_triggersShowThemeSettingDialogEvent() = testDispatcher.runBlockingTest {
         assertThat(viewModel.showThemeSettingDialog.value).isNull()
 
         viewModel.onThemeSettingClicked()
@@ -81,7 +82,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun assert_availableThemes_isCorrect() {
+    fun assert_availableThemes_isCorrect() = testDispatcher.runBlockingTest {
         val availableThemes = viewModel.availableThemes.await()
 
         // Don't test that FOLLOW_SYSTEM vs AUTO_BATTERY logic.
@@ -95,7 +96,7 @@ class SettingsViewModelTest {
     }
 
     @Test
-    fun assert_setSelectedTheme_updatesThemeAndSavesValue() {
+    fun assert_setSelectedTheme_updatesThemeAndSavesValue() = testDispatcher.runBlockingTest {
         var postedValue: Theme? = null
         var latch = CountDownLatch(1)
 

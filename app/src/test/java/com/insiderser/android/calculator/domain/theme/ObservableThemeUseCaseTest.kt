@@ -32,23 +32,22 @@ import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.channels.ReceiveChannel
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestCoroutineDispatcher
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.withTimeout
 import org.junit.Test
 
 @ObsoleteCoroutinesApi
 class ObservableThemeUseCaseTest {
 
-    private val storage =
-        FakeAppPreferencesStorage()
+    private val testDispatcher = TestCoroutineDispatcher()
 
-    private val useCase =
-        ObservableThemeUseCase(
-            storage
-        )
+    private val storage = FakeAppPreferencesStorage()
+
+    private val useCase = ObservableThemeUseCase(storage, testDispatcher)
 
     @Test
-    fun assert_whenPreferenceUpdated_flowIsUpdated() = runBlocking {
+    fun assert_whenPreferenceUpdated_flowIsUpdated() = testDispatcher.runBlockingTest {
         val channel = ConflatedBroadcastChannel<Theme>()
         val currentThemeSubscription = channel.openSubscription()
         val collectJob = launch {

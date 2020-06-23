@@ -21,18 +21,22 @@
  */
 package com.insiderser.android.calculator.domain.theme
 
+import com.insiderser.android.calculator.dagger.IO
 import com.insiderser.android.calculator.data.AppPreferencesStorage
 import com.insiderser.android.calculator.domain.UseCase
 import com.insiderser.android.calculator.model.Theme
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 /**
  * Use case for setting user-selected theme settings to app preferences.
  */
 class SetThemeUseCase @Inject constructor(
-    private val prefs: AppPreferencesStorage
-) : UseCase<Theme, Unit>(Dispatchers.IO) {
+    private val prefs: AppPreferencesStorage,
+    @IO ioDispatcher: CoroutineDispatcher
+) : UseCase<Theme, Unit>() {
+
+    override val coroutineDispatcher = ioDispatcher
 
     override suspend fun execute(param: Theme) {
         prefs.selectedTheme = param.storageKey

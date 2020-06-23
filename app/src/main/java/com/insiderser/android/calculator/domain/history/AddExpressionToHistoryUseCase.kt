@@ -22,17 +22,21 @@
 
 package com.insiderser.android.calculator.domain.history
 
+import com.insiderser.android.calculator.dagger.IO
 import com.insiderser.android.calculator.data.HistoryRepository
 import com.insiderser.android.calculator.db.ExpressionsHistoryEntity
 import com.insiderser.android.calculator.domain.UseCase
 import com.insiderser.android.calculator.domain.math.EvaluateExpressionUseCase
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
 class AddExpressionToHistoryUseCase @Inject constructor(
     private val historyRepository: HistoryRepository,
-    private val evaluateExpressionUseCase: EvaluateExpressionUseCase
-) : UseCase<String, Unit>(Dispatchers.IO) {
+    private val evaluateExpressionUseCase: EvaluateExpressionUseCase,
+    @IO ioDispatcher: CoroutineDispatcher
+) : UseCase<String, Unit>() {
+
+    override val coroutineDispatcher = ioDispatcher
 
     override suspend fun execute(param: String) {
         val result = evaluateExpressionUseCase(param)

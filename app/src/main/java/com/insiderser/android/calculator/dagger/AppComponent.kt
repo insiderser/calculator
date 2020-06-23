@@ -45,7 +45,8 @@ import javax.inject.Singleton
 @Component(
     modules = [
         MainActivityModule::class,
-        DataModule::class
+        DataModule::class,
+        CoroutineDispatchersModule::class
     ]
 )
 interface AppComponent {

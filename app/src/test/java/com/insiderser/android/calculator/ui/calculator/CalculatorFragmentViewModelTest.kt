@@ -35,15 +35,14 @@ import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ObsoleteCoroutinesApi
-import kotlinx.coroutines.newSingleThreadContext
+import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.resetMain
+import kotlinx.coroutines.test.runBlockingTest
 import kotlinx.coroutines.test.setMain
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
-import java.util.concurrent.CountDownLatch
-import java.util.concurrent.TimeUnit
 
 @OptIn(ObsoleteCoroutinesApi::class)
 class CalculatorFragmentViewModelTest {
@@ -60,35 +59,29 @@ class CalculatorFragmentViewModelTest {
 
     private lateinit var viewModel: CalculatorFragmentViewModel
 
-    // 1 for expression & 1 for result
-    private var latch = CountDownLatch(2)
-
-    private val mainThreadSurrogate = newSingleThreadContext("UI thread")
+    private val testDispatcher = TestCoroutineDispatcher()
 
     @Before
     fun setUp() {
         MockKAnnotations.init(this)
-        Dispatchers.setMain(mainThreadSurrogate)
+        Dispatchers.setMain(testDispatcher)
 
         every { localizeExpressionUseCase.invoke(any<Double>()) } answers {
-            arg<Double>(0).toString()
+            val valueParameter = arg<Double>(0)
+            valueParameter.toString()
         }
+
         every { localizeExpressionUseCase.invoke(any<String>()) } returnsArgument 0
 
         viewModel = CalculatorFragmentViewModel(
-            EvaluateExpressionUseCase(),
+            EvaluateExpressionUseCase(testDispatcher),
             localizeExpressionUseCase,
             AddExpressionToHistoryUseCase(
                 HistoryRepository(historyDao),
-                EvaluateExpressionUseCase()
+                EvaluateExpressionUseCase(testDispatcher),
+                testDispatcher
             )
         )
-        viewModel.expression.observeForever {
-            latch.countDown()
-        }
-        viewModel.result.observeForever {
-            latch.countDown()
-        }
     }
 
     @After
@@ -97,60 +90,44 @@ class CalculatorFragmentViewModelTest {
     }
 
     @Test
-    fun testExpressionResultFlow() {
+    fun testExpressionResultFlow() = testDispatcher.runBlockingTest {
+        viewModel.expression.observeForever {}
+        viewModel.result.observeForever {}
+
         checkExpressionAndResult("", "")
 
-        performActionAndCheckExpressionAndResult("5", "5.0") {
-            viewModel.onArithmeticButtonClicked("5")
-        }
+        viewModel.onArithmeticButtonClicked("5")
+        checkExpressionAndResult("5", "5.0")
 
-        performActionAndCheckExpressionAndResult("5!", "120.0") {
-            viewModel.onArithmeticButtonClicked("!")
-        }
+        viewModel.onArithmeticButtonClicked("!")
+        checkExpressionAndResult("5!", "120.0")
 
-        performActionAndCheckExpressionAndResult("5!+", "") {
-            viewModel.onArithmeticButtonClicked("+")
-        }
+        viewModel.onArithmeticButtonClicked("+")
+        checkExpressionAndResult("5!+", "")
 
-        performActionAndCheckExpressionAndResult("5!", "120.0") {
-            viewModel.onClearButtonClicked()
-        }
+        viewModel.onClearButtonClicked()
+        checkExpressionAndResult("5!", "120.0")
 
-        performActionAndCheckExpressionAndResult("5!*sin(pi/2)", "120.0") {
-            latch = CountDownLatch(14)
-            viewModel.onArithmeticButtonClicked("*")
-            viewModel.onArithmeticButtonClicked("sin")
-            viewModel.onArithmeticButtonClicked("(")
-            viewModel.onArithmeticButtonClicked("pi")
-            viewModel.onArithmeticButtonClicked("/")
-            viewModel.onArithmeticButtonClicked("2")
-            viewModel.onArithmeticButtonClicked(")")
-        }
+        viewModel.onArithmeticButtonClicked("*")
+        viewModel.onArithmeticButtonClicked("sin")
+        viewModel.onArithmeticButtonClicked("(")
+        viewModel.onArithmeticButtonClicked("pi")
+        viewModel.onArithmeticButtonClicked("/")
+        viewModel.onArithmeticButtonClicked("2")
+        viewModel.onArithmeticButtonClicked(")")
+        checkExpressionAndResult("5!*sin(pi/2)", "120.0")
 
-        performActionAndCheckExpressionAndResult("", "") {
-            viewModel.onClearButtonLongClick()
-        }
+        viewModel.onClearButtonLongClick()
+        checkExpressionAndResult("", "")
 
-        performActionAndCheckExpressionAndResult("", "") {
-            viewModel.onClearButtonClicked()
-        }
-    }
-
-    private inline fun performActionAndCheckExpressionAndResult(
-        expectedExpression: String,
-        expectedResult: String,
-        action: () -> Unit
-    ) {
-        latch = CountDownLatch(2)
-        action()
-        checkExpressionAndResult(expectedExpression, expectedResult)
+        viewModel.onClearButtonClicked()
+        checkExpressionAndResult("", "")
     }
 
     private fun checkExpressionAndResult(
         expectedExpression: String,
         expectedResult: String
     ) {
-        latch.await(500, TimeUnit.MILLISECONDS)
         assertThat(viewModel.expression.value).isEqualTo(expectedExpression)
         assertThat(viewModel.result.value).isEqualTo(expectedResult)
     }

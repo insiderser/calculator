@@ -35,9 +35,13 @@ class MathKtTest {
         assertThat(factorial(5)).isEqualTo(120.0)
         assertThat(factorial(7)).isEqualTo(5040.0)
         assertThat(factorial(250)).isEqualTo(Double.POSITIVE_INFINITY)
+        assertThat(factorial(Long.MAX_VALUE)).isEqualTo(Double.POSITIVE_INFINITY)
 
         assertThrows(IllegalArgumentException::class.java) {
             factorial(-1)
+        }
+        assertThrows(IllegalArgumentException::class.java) {
+            factorial(Long.MIN_VALUE)
         }
     }
 

@@ -49,35 +49,33 @@ class CalculatorFragmentViewModel @Inject constructor(
 
     // Why not StringBuffer? Because we want to synchronize on the level
     // of the whole transformation, not on the level of individual operation.
-    private val _expression = StringBuilder()
+    private val expressionBuilder = StringBuilder()
     private val expressionChangedChannel = ConflatedBroadcastChannel(Unit)
 
     /** Localized current expression. */
     val expression: LiveData<CharSequence> = expressionChangedChannel.asFlow()
-        .map { localizeExpressionUseCase(_expression.toString()) }
-        .asLiveData()
+        .map { localizeExpressionUseCase(expressionBuilder.toString()) }
+        .asLiveData(viewModelScope.coroutineContext)
 
     /** The localized result of the current expression. */
     val result: LiveData<CharSequence> = expressionChangedChannel.asFlow()
         .mapLatest {
-            evaluateExpressionUseCase(_expression.toString())
+            evaluateExpressionUseCase(expressionBuilder.toString())
                 .onFailure { e -> Timber.i(e) }
                 .map { result -> localizeExpressionUseCase(result) }
                 .getOrDefault("")
         }
         .buffer(CONFLATED)
-        .asLiveData()
+        .asLiveData(viewModelScope.coroutineContext)
 
     fun onArithmeticButtonClicked(tag: String) = updateExpression { append(tag) }
 
     fun onEqualButtonClicked() = updateExpression {
         viewModelScope.launch {
             if (isNotEmpty()) {
-                addExpressionToHistoryUseCase(_expression.toString())
+                addExpressionToHistoryUseCase(expressionBuilder.toString())
             }
         }
-
-        /* TODO */
     }
 
     fun onClearButtonClicked() = updateExpression {
@@ -89,8 +87,8 @@ class CalculatorFragmentViewModel @Inject constructor(
     fun onClearButtonLongClick() = updateExpression { clear() }
 
     private inline fun updateExpression(crossinline transform: StringBuilder.() -> Unit) {
-        synchronized(_expression) {
-            transform(_expression)
+        synchronized(expressionBuilder) {
+            transform(expressionBuilder)
         }
         expressionChangedChannel.offer(Unit)
     }

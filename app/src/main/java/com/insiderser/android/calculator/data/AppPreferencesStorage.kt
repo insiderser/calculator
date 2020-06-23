@@ -27,8 +27,9 @@ import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import androidx.annotation.WorkerThread
 import androidx.core.content.edit
+import com.insiderser.android.calculator.dagger.IO
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
@@ -63,9 +64,12 @@ interface AppPreferencesStorage {
  * Implementation of [AppPreferencesStorage] that uses [SharedPreferences] to store the data.
  */
 @Singleton
-class AppPreferencesStorageImpl @Inject constructor(context: Context) : AppPreferencesStorage {
+class AppPreferencesStorageImpl @Inject constructor(
+    context: Context,
+    @IO ioDispatcher: CoroutineDispatcher
+) : AppPreferencesStorage {
 
-    private val storageIOScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private val storageIOScope = CoroutineScope(SupervisorJob() + ioDispatcher)
 
     // Lazy to prevent IO on the main thread
     private val sharedPreferences: Lazy<SharedPreferences> = lazy {

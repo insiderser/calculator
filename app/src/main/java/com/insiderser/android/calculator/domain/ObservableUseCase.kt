@@ -21,27 +21,28 @@
  */
 package com.insiderser.android.calculator.domain
 
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOn
 
 /**
  * Executes its business logic in [createObservable] method.
- *
- * @param P Type of parameter that will be passed to [createObservable] function.
- * @param R Type that will be returned, wrapped in [Flow].
  */
-abstract class ObservableUseCase<in P, R> {
+abstract class ObservableUseCase<in Param, Type> {
 
-    private val channel = ConflatedBroadcastChannel<P>()
+    private val channel = ConflatedBroadcastChannel<Param>()
+
+    abstract val coroutineDispatcher: CoroutineDispatcher
 
     /**
      * Execute the logic with the given [parameters][params]. This method is non-blocking,
      * meaning that it's safe to call it on any thread.
      */
-    operator fun invoke(params: P) {
+    operator fun invoke(params: Param) {
         channel.offer(params)
     }
 
@@ -51,7 +52,7 @@ abstract class ObservableUseCase<in P, R> {
      * **Note**: it's implementation's responsibility to make sure that
      * no heavy logic is executed on the main thread.
      */
-    protected abstract suspend fun createObservable(params: P): Flow<R>
+    protected abstract suspend fun createObservable(params: Param): Flow<Type>
 
     /**
      * Returns observable [Flow] that will be updated with new values.
@@ -59,9 +60,10 @@ abstract class ObservableUseCase<in P, R> {
      * **Note**: this method only returns the observable. To execute this use case,
      * call [invoke] method.
      */
-    fun observe(): Flow<R> = channel.asFlow()
+    fun observe(): Flow<Type> = channel.asFlow()
         .distinctUntilChanged()
         .flatMapLatest { createObservable(it) }
+        .flowOn(coroutineDispatcher)
 }
 
 /**

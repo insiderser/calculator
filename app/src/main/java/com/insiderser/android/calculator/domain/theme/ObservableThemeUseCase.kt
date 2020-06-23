@@ -21,13 +21,13 @@
  */
 package com.insiderser.android.calculator.domain.theme
 
+import com.insiderser.android.calculator.dagger.IO
 import com.insiderser.android.calculator.data.AppPreferencesStorage
 import com.insiderser.android.calculator.domain.ObservableUseCase
 import com.insiderser.android.calculator.model.Theme
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 /**
@@ -36,13 +36,14 @@ import javax.inject.Inject
  * @see invoke
  */
 class ObservableThemeUseCase @Inject constructor(
-    private val preferencesStorage: AppPreferencesStorage
+    private val preferencesStorage: AppPreferencesStorage,
+    @IO ioDispatcher: CoroutineDispatcher
 ) : ObservableUseCase<Unit, Theme>() {
 
-    override suspend fun createObservable(params: Unit): Flow<Theme> = withContext(Dispatchers.IO) {
+    override val coroutineDispatcher = ioDispatcher
+
+    override suspend fun createObservable(params: Unit): Flow<Theme> =
         preferencesStorage.selectedThemeObservable.map { storageKey: String? ->
-            storageKey?.let { Theme.fromStorageKey(storageKey) }
-                ?: DEFAULT_THEME
+            storageKey?.let { Theme.fromStorageKey(storageKey) } ?: DEFAULT_THEME
         }
-    }
 }

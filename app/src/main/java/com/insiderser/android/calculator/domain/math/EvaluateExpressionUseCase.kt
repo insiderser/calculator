@@ -21,8 +21,9 @@
  */
 package com.insiderser.android.calculator.domain.math
 
+import com.insiderser.android.calculator.dagger.Default
 import com.insiderser.android.calculator.domain.UseCase
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.CoroutineDispatcher
 import net.objecthunter.exp4j.ExpressionBuilder
 import net.objecthunter.exp4j.operator.Operator
 import javax.inject.Inject
@@ -30,8 +31,11 @@ import javax.inject.Inject
 /**
  * A use case that can evaluate mathematical expressions. **Expressions must be not localized**.
  */
-class EvaluateExpressionUseCase @Inject constructor() :
-    UseCase<String, Double>(Dispatchers.Default) {
+class EvaluateExpressionUseCase @Inject constructor(
+    @Default defaultDispatcher: CoroutineDispatcher
+) : UseCase<String, Double>() {
+
+    override val coroutineDispatcher = defaultDispatcher
 
     override suspend fun execute(param: String): Double {
         try {
@@ -42,11 +46,9 @@ class EvaluateExpressionUseCase @Inject constructor() :
             require(result.isFinite()) { "Got $result result" }
             return result
         } catch (e: RuntimeException) {
-            throw when (e) {
-                is ArithmeticException, is IllegalArgumentException ->
-                    InvalidExpressionException(e.message)
-                else -> e
-            }
+            if (e is ArithmeticException || e is IllegalArgumentException) {
+                throw InvalidExpressionException(e.message)
+            } else throw e
         }
     }
 }
