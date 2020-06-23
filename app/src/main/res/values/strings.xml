@@ -39,4 +39,5 @@
 
     <string name="settings_about_group_label">About</string>
     <string name="settings_about_version">Version</string>
+    <string name="history_clear_all">Clear</string>
 </resources>

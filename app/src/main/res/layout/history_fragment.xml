@@ -36,6 +36,7 @@
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/history_menu"
             app:title="@string/history_title" />
     </com.google.android.material.appbar.AppBarLayout>
 

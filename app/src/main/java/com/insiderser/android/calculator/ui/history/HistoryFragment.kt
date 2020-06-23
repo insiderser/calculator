@@ -25,15 +25,18 @@ package com.insiderser.android.calculator.ui.history
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
+import com.insiderser.android.calculator.R
 import com.insiderser.android.calculator.dagger.injector
 import com.insiderser.android.calculator.databinding.HistoryFragmentBinding
 import com.insiderser.android.calculator.ui.NavigationHost
+import com.insiderser.android.calculator.utils.consume
 import com.insiderser.android.calculator.utils.viewLifecycleScoped
 import dev.chrisbanes.insetter.applySystemWindowInsetsToPadding
 import javax.inject.Inject
@@ -61,6 +64,7 @@ class HistoryFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (activity as? NavigationHost)?.registerToolbarWithNavigation(binding.toolbar)
+        binding.toolbar.setOnMenuItemClickListener { handleOnMenuItemClicked(it) }
 
         binding.appBar.applySystemWindowInsetsToPadding(top = true)
 
@@ -72,5 +76,11 @@ class HistoryFragment : Fragment() {
         }
 
         viewModel.history.observe(viewLifecycleOwner) { historyAdapter.submitList(it) }
+    }
+
+    private fun handleOnMenuItemClicked(item: MenuItem) = consume {
+        if (item.itemId == R.id.clear_all) {
+            viewModel.clearHistory()
+        }
     }
 }
