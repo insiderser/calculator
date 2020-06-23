@@ -1,7 +1,7 @@
 ## Calculator
 
 [![Gradle build](https://github.com/Insiderser/calculator/workflows/Build/badge.svg)](https://github.com/Insiderser/calculator/actions?query=branch%3Amaster+workflow%3Abuild)
-[![Codacy badge](https://api.codacy.com/project/badge/Grade/041b5a6aaea24bb58766ac38b02263b5)](https://www.codacy.com/manual/Insiderser/calculator?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Insiderser/AndroidTemplate&amp;utm_campaign=Badge_Grade)
+[![Codacy badge](https://api.codacy.com/project/badge/Grade/041b5a6aaea24bb58766ac38b02263b5)](https://www.codacy.com/manual/Insiderser/calculator)
 
 ### License
 
