@@ -154,6 +154,6 @@ class ExpressionsHistoryDaoTest {
     private fun checkTableContainsExactly(vararg entities: ExpressionsHistoryEntity) {
         val dataSource = dao.findAll().create() as LimitOffsetDataSource<ExpressionsHistoryEntity>
         val allEntities = dataSource.loadRange(0, Int.MAX_VALUE)
-        assertThat(allEntities).containsExactlyElementsIn(entities)
+        assertThat(allEntities).containsExactlyElementsIn(entities).inOrder()
     }
 }

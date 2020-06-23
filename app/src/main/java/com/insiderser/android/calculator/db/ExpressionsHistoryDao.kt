@@ -39,7 +39,7 @@ interface ExpressionsHistoryDao {
      * Get all entries from the database.
      * @return Paged list factory with all entities, or an empty list if the table is empty.
      */
-    @Query("SELECT * FROM history")
+    @Query("SELECT * FROM history ORDER BY timeAdded DESC")
     fun findAll(): DataSource.Factory<Int, ExpressionsHistoryEntity>
 
     /**
