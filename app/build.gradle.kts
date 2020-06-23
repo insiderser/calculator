@@ -20,6 +20,8 @@
  * SOFTWARE.
  */
 
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+
 plugins {
     id("com.android.application")
     kotlin("android")
@@ -29,11 +31,11 @@ plugins {
 }
 
 android {
-    compileSdkVersion(29)
-    buildToolsVersion("29.0.2")
+    compileSdkVersion(30)
+    buildToolsVersion("30.0.0")
 
     defaultConfig {
-        targetSdkVersion(29)
+        targetSdkVersion(30)
         minSdkVersion(23)
 
         versionName = "1.0.0"
@@ -67,8 +69,11 @@ android {
         }
     }
 
-    viewBinding {
-        isEnabled = true
+    buildFeatures {
+        viewBinding = true
+        renderScript = false
+        aidl = false
+        shaders = false
     }
 
     compileOptions {
@@ -93,9 +98,7 @@ android {
 
     testOptions {
         animationsDisabled = true
-        unitTests.run {
-            isIncludeAndroidResources = true
-        }
+        unitTests.isIncludeAndroidResources = true
     }
 }
 
@@ -105,14 +108,14 @@ fun DependencyHandler.sharedTestImplementation(dependencyNotation: String) {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.70")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3")
-    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.3")
-    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.3")
+    implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:1.3.72")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.7")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.7")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.3.7")
 
-    implementation("androidx.core:core-ktx:1.2.0")
-    implementation("androidx.appcompat:appcompat:1.1.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta4")
+    implementation("androidx.core:core-ktx:1.3.0")
+    implementation("androidx.appcompat:appcompat:1.2.0-rc01")
+    implementation("androidx.constraintlayout:constraintlayout:2.0.0-beta7")
     implementation("androidx.recyclerview:recyclerview:1.1.0")
 
     implementation("androidx.lifecycle:lifecycle-extensions:2.2.0")
@@ -122,37 +125,51 @@ dependencies {
 
     implementation("com.google.android.material:material:1.1.0")
     implementation("androidx.activity:activity-ktx:1.1.0")
-    implementation("androidx.fragment:fragment-ktx:1.2.2")
-    debugImplementation("androidx.fragment:fragment-testing:1.2.2")
+    implementation("androidx.fragment:fragment-ktx:1.2.5")
+    debugImplementation("androidx.fragment:fragment-testing:1.2.5")
 
-    implementation("androidx.navigation:navigation-ui-ktx:2.2.1")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.2.1")
+    implementation("androidx.navigation:navigation-ui-ktx:2.2.2")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.2.2")
 
-    implementation("androidx.room:room-ktx:2.2.4")
-    implementation("androidx.room:room-runtime:2.2.4")
-    kapt("androidx.room:room-compiler:2.2.4")
+    implementation("androidx.room:room-ktx:2.2.5")
+    implementation("androidx.room:room-runtime:2.2.5")
+    kapt("androidx.room:room-compiler:2.2.5")
 
-    implementation("androidx.paging:paging-runtime-ktx:2.1.1")
+    implementation("androidx.paging:paging-runtime-ktx:2.1.2")
 
     implementation("com.jakewharton.timber:timber:4.7.1")
-    implementation("dev.chrisbanes:insetter-ktx:0.2.1")
+    implementation("dev.chrisbanes:insetter-ktx:0.3.0")
     implementation("net.objecthunter:exp4j:0.4.8")
 
-    implementation("com.google.dagger:dagger:2.26")
-    kapt("com.google.dagger:dagger-compiler:2.26")
+    implementation("com.google.dagger:dagger:2.28.1")
+    kapt("com.google.dagger:dagger-compiler:2.28.1")
 
-    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.2")
+    debugImplementation("com.squareup.leakcanary:leakcanary-android:2.4")
 
     sharedTestImplementation("junit:junit:4.13")
     sharedTestImplementation("com.google.truth:truth:1.0.1")
-    testImplementation("io.mockk:mockk:1.9.3")
+    testImplementation("io.mockk:mockk:1.10.0")
 
-    sharedTestImplementation("androidx.test:core:1.2.0")
-    sharedTestImplementation("androidx.test:runner:1.2.0")
+    sharedTestImplementation("androidx.test:core-ktx:1.2.0")
     sharedTestImplementation("androidx.test:rules:1.2.0")
-    sharedTestImplementation("androidx.test.ext:junit:1.1.1")
+    sharedTestImplementation("androidx.test.ext:junit-ktx:1.1.1")
     sharedTestImplementation("androidx.arch.core:core-testing:2.1.0")
 
     testImplementation("org.robolectric:robolectric:4.3.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.2.0")
+}
+
+tasks.withType<KotlinCompile> {
+    kotlinOptions {
+        allWarningsAsErrors = true
+        jvmTarget = "1.8"
+
+        freeCompilerArgs = listOf(
+            "-Xjsr305=strict",
+            "-Xallow-result-return-type",
+            "-Xopt-in=kotlin.RequiresOptIn",
+            "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
+            "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
+        )
+    }
 }

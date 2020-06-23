@@ -21,23 +21,23 @@
  */
 
 import com.github.benmanes.gradle.versions.updates.DependencyUpdatesTask
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 buildscript {
     repositories {
         google()
         jcenter()
         maven("https://jitpack.io")
+        mavenCentral()
     }
     dependencies {
-        classpath("com.android.tools.build:gradle:3.6.1")
-        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.70")
-        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.2.1")
+        classpath("com.android.tools.build:gradle:4.0.0")
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.3.72")
+        classpath("androidx.navigation:navigation-safe-args-gradle-plugin:2.2.2")
     }
 }
 
 plugins {
-    id("com.github.ben-manes.versions") version "0.27.0"
+    id("com.github.ben-manes.versions") version "0.28.0"
 }
 
 allprojects {
@@ -45,23 +45,7 @@ allprojects {
         google()
         jcenter()
         maven("https://jitpack.io")
-    }
-}
-
-subprojects {
-    tasks.withType<KotlinCompile> {
-        kotlinOptions {
-            allWarningsAsErrors = true
-            jvmTarget = "1.8"
-
-            freeCompilerArgs = mutableListOf(
-                "-Xjsr305=strict",
-                "-Xallow-result-return-type",
-                "-Xopt-in=kotlin.RequiresOptIn",
-                "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
-                "-Xuse-experimental=kotlinx.coroutines.FlowPreview"
-            )
-        }
+        mavenCentral()
     }
 }
 
