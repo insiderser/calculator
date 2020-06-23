@@ -24,7 +24,6 @@ package com.insiderser.android.calculator.ui.calculator
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import com.insiderser.android.calculator.data.HistoryRepository
 import com.insiderser.android.calculator.db.ExpressionsHistoryDao
 import com.insiderser.android.calculator.domain.history.AddExpressionToHistoryUseCase
 import com.insiderser.android.calculator.domain.math.EvaluateExpressionUseCase
@@ -78,7 +77,7 @@ class CalculatorFragmentViewModelTest {
             EvaluateExpressionUseCase(testDispatcher),
             localizeExpressionUseCase,
             AddExpressionToHistoryUseCase(
-                HistoryRepository(historyDao),
+                historyDao,
                 EvaluateExpressionUseCase(testDispatcher),
                 testDispatcher
             )

@@ -26,39 +26,23 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
-import androidx.paging.toLiveData
-import com.insiderser.android.calculator.data.HistoryRepository
 import com.insiderser.android.calculator.domain.history.ClearHistoryUseCase
+import com.insiderser.android.calculator.domain.history.GetFullHistoryUseCase
 import com.insiderser.android.calculator.domain.invoke
-import com.insiderser.android.calculator.domain.math.LocalizeExpressionUseCase
 import com.insiderser.android.calculator.model.HistoryItem
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class HistoryViewModel @Inject constructor(
-    historyRepository: HistoryRepository,
-    localizeExpressionUseCase: LocalizeExpressionUseCase,
+    getFullHistoryUseCase: GetFullHistoryUseCase,
     private val clearHistoryUseCase: ClearHistoryUseCase
 ) : ViewModel() {
 
-    val history: LiveData<PagedList<HistoryItem>> = historyRepository.getAll()
-        .map { item ->
-            HistoryItem(
-                id = item.id,
-                expression = localizeExpressionUseCase(item.expression),
-                result = localizeExpressionUseCase(item.result),
-                dateAdded = item.timeAdded
-            )
-        }
-        .toLiveData(PAGE_SIZE)
+    val history: LiveData<PagedList<HistoryItem>> = getFullHistoryUseCase()
 
     fun clearHistory() {
         viewModelScope.launch {
             clearHistoryUseCase()
         }
-    }
-
-    companion object {
-        private const val PAGE_SIZE = 25
     }
 }
