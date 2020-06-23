@@ -82,7 +82,6 @@ jobs:
   ui-test:
     name: UI tests
     runs-on: macos-latest
-    needs: build
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
