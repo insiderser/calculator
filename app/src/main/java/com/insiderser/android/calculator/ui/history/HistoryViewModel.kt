@@ -45,5 +45,9 @@ class HistoryViewModel @Inject constructor(
                 dateAdded = item.timeAdded
             )
         }
-        .toLiveData(pageSize = 25)
+        .toLiveData(PAGE_SIZE)
+
+    companion object {
+        private const val PAGE_SIZE = 25
+    }
 }
