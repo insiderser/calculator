@@ -73,7 +73,7 @@ class CalculatorFragmentViewModel @Inject constructor(
     fun onEqualButtonClicked() = updateExpression {
         viewModelScope.launch {
             if (isNotEmpty()) {
-                addExpressionToHistoryUseCase(this.toString())
+                addExpressionToHistoryUseCase(_expression.toString())
             }
         }
 
