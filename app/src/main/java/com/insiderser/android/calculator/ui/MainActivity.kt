@@ -28,7 +28,6 @@ import androidx.appcompat.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.onNavDestinationSelected
 import androidx.navigation.ui.setupWithNavController
 import com.insiderser.android.calculator.R
 import com.insiderser.android.calculator.databinding.MainActivityBinding
@@ -68,7 +67,6 @@ class MainActivity : AppCompatActivity(), NavigationHost {
 
     override fun registerToolbarWithNavigation(toolbar: Toolbar) {
         toolbar.setupWithNavController(navController, appBarConfiguration)
-        toolbar.setOnMenuItemClickListener { it.onNavDestinationSelected(navController) }
     }
 
     private fun navigateTo(@IdRes destination: Int) {

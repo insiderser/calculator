@@ -24,6 +24,7 @@ package com.insiderser.android.calculator.ui.calculator
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.children
@@ -31,6 +32,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.onNavDestinationSelected
 import com.insiderser.android.calculator.R
 import com.insiderser.android.calculator.dagger.injector
 import com.insiderser.android.calculator.databinding.CalculatorFragmentBinding
@@ -65,6 +68,8 @@ class CalculatorFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (activity as? NavigationHost)?.registerToolbarWithNavigation(binding.toolbar)
+        binding.toolbar.setOnMenuItemClickListener { handleOnMenuItemClicked(it) }
+
         configureInsets()
         configureNumpad()
         observeData()
@@ -116,5 +121,10 @@ class CalculatorFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun handleOnMenuItemClicked(item: MenuItem) = consume {
+        val navController = findNavController()
+        item.onNavDestinationSelected(navController)
     }
 }
