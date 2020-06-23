@@ -3,6 +3,19 @@
 [![Gradle build](https://github.com/Insiderser/calculator/workflows/Build/badge.svg)](https://github.com/Insiderser/calculator/actions?query=branch%3Amaster+workflow%3Abuild)
 [![Codacy badge](https://api.codacy.com/project/badge/Grade/041b5a6aaea24bb58766ac38b02263b5)](https://www.codacy.com/manual/Insiderser/calculator)
 
+A simplified clone of Google Calculator.
+
+This app was made for learning purposes only.
+
+### Screenshots
+
+<img src="screenshots/main.png"
+     alt="Main screen"
+     width="300px">
+<img src="screenshots/history.png"
+     alt="History list"
+     width="300px">
+
 ### License
 
 ```
