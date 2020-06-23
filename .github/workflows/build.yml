@@ -79,9 +79,6 @@ jobs:
     name: UI tests
     runs-on: macos-latest
     needs: build
-    strategy:
-      matrix:
-        api-level: 29
     steps:
       - name: Checkout repo
         uses: actions/checkout@v2
@@ -94,7 +91,7 @@ jobs:
       - name: Run connected tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: ${{ matrix.api-level }}
+          api-level: 29
           script: ./gradlew connectedCheck
 
       - name: Upload reports
