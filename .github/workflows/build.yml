@@ -29,7 +29,6 @@ jobs:
         run: |
           mkdir -p ~/.gradle
           cp .github/ci-gradle.properties ~/.gradle/gradle.properties
-          cp -f .github/ci-robolectric.properties app/src/test/resources/robolectric.properties
 
       - name: Restore Gradle cache
         uses: actions/cache@v1
