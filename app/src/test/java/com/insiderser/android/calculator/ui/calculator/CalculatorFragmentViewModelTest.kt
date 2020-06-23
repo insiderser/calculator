@@ -33,6 +33,7 @@ import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
 import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -130,5 +131,17 @@ class CalculatorFragmentViewModelTest {
     ) {
         assertThat(viewModel.expression.value).isEqualTo(expectedExpression)
         assertThat(viewModel.result.value).isEqualTo(expectedResult)
+    }
+
+    @Test
+    fun onEqualButtonClicked_insertsHistoryEntityIntoDao() = testDispatcher.runBlockingTest {
+        viewModel.onArithmeticButtonClicked("5")
+        viewModel.onArithmeticButtonClicked("+")
+        viewModel.onArithmeticButtonClicked("9")
+        viewModel.onEqualButtonClicked()
+
+        verify(exactly = 1) {
+            historyDao.insertOne(any())
+        }
     }
 }
