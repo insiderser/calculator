@@ -159,7 +159,6 @@ tasks.withType<KotlinCompile> {
         jvmTarget = "1.8"
 
         freeCompilerArgs = listOf(
-            "-Xjsr305=strict",
             "-Xallow-result-return-type",
             "-Xopt-in=kotlin.RequiresOptIn",
             "-Xuse-experimental=kotlinx.coroutines.ExperimentalCoroutinesApi",
