@@ -45,10 +45,10 @@ class EvaluateExpressionUseCase @Inject constructor(
                 .evaluate() + 0.0 // This ensures that we don't get -0.0
             require(result.isFinite()) { "Got $result result" }
             return result
-        } catch (e: RuntimeException) {
-            if (e is ArithmeticException || e is IllegalArgumentException) {
-                throw InvalidExpressionException(e.message)
-            } else throw e
+        } catch (e: ArithmeticException) {
+            throw InvalidExpressionException(e)
+        } catch (e: IllegalArgumentException) {
+            throw InvalidExpressionException(e)
         }
     }
 }
@@ -68,4 +68,4 @@ private object FactorialOperator : Operator("!", 1, true, PRECEDENCE_POWER + 1) 
 /**
  * Thrown to indicate that the expression is invalid.
  */
-class InvalidExpressionException(message: String?) : IllegalArgumentException(message)
+class InvalidExpressionException(cause: Throwable) : IllegalArgumentException(cause)
