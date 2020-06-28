@@ -122,8 +122,8 @@ dependencies {
     implementation("androidx.fragment:fragment-ktx:1.2.5")
     debugImplementation("androidx.fragment:fragment-testing:1.2.5")
 
-    implementation("androidx.navigation:navigation-ui-ktx:2.2.2")
-    implementation("androidx.navigation:navigation-fragment-ktx:2.2.2")
+    implementation("androidx.navigation:navigation-ui-ktx:2.3.0")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.3.0")
 
     implementation("androidx.room:room-ktx:2.2.5")
     implementation("androidx.room:room-runtime:2.2.5")
