@@ -24,15 +24,13 @@ package com.insiderser.android.calculator.ui.calculator
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
-import com.insiderser.android.calculator.db.ExpressionsHistoryDao
 import com.insiderser.android.calculator.domain.history.AddExpressionToHistoryUseCase
 import com.insiderser.android.calculator.domain.math.EvaluateExpressionUseCase
 import com.insiderser.android.calculator.domain.math.LocalizeExpressionUseCase
+import com.insiderser.android.calculator.fakes.FakeExpressionsHistoryDao
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.RelaxedMockK
-import io.mockk.verify
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ObsoleteCoroutinesApi
 import kotlinx.coroutines.test.TestCoroutineDispatcher
@@ -54,8 +52,7 @@ class CalculatorFragmentViewModelTest {
     @MockK
     private lateinit var localizeExpressionUseCase: LocalizeExpressionUseCase
 
-    @RelaxedMockK
-    private lateinit var historyDao: ExpressionsHistoryDao
+    private val historyDao = FakeExpressionsHistoryDao()
 
     private lateinit var viewModel: CalculatorFragmentViewModel
 
@@ -139,8 +136,6 @@ class CalculatorFragmentViewModelTest {
         viewModel.onArithmeticButtonClicked("9")
         viewModel.onEqualButtonClicked()
 
-        verify(exactly = 1) {
-            historyDao.insertOne(any())
-        }
+        assertThat(historyDao.history.any { it.value.expression == "5+9" }).isTrue()
     }
 }
