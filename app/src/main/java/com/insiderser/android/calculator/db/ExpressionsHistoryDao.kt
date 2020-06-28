@@ -22,7 +22,6 @@
 package com.insiderser.android.calculator.db
 
 import androidx.annotation.WorkerThread
-import androidx.lifecycle.LiveData
 import androidx.paging.DataSource
 import androidx.room.Dao
 import androidx.room.Insert
@@ -47,7 +46,7 @@ interface ExpressionsHistoryDao {
      * @return Found [ExpressionsHistoryEntity], or `null` if nothing found.
      */
     @Query("SELECT * FROM history WHERE id == :id")
-    fun findOneById(id: Int): LiveData<ExpressionsHistoryEntity>
+    suspend fun findById(id: Int): ExpressionsHistoryEntity?
 
     /**
      * Insert a single [ExpressionsHistoryEntity] into the database.

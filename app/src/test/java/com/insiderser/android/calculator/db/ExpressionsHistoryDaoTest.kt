@@ -27,7 +27,7 @@ import androidx.room.paging.LimitOffsetDataSource
 import androidx.test.core.app.ApplicationProvider.getApplicationContext
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
-import com.insiderser.android.calculator.test.await
+import kotlinx.coroutines.test.runBlockingTest
 import org.junit.After
 import org.junit.Before
 import org.junit.Rule
@@ -59,7 +59,7 @@ class ExpressionsHistoryDaoTest {
     }
 
     @Test
-    fun givenNewEntityWithId_insertOne_insertsWithThisId() {
+    fun givenNewEntityWithId_insertOne_insertsWithThisId() = runBlockingTest {
         val id = 6
         val expression = "5 tan π + 6 ^ 3"
         val result = 216.0
@@ -74,7 +74,7 @@ class ExpressionsHistoryDaoTest {
         val newId = dao.insertOne(entity)
         assertThat(newId).isEqualTo(id)
 
-        val insertedEntity = dao.findOneById(id).await()
+        val insertedEntity = dao.findById(id)
         checkNotNull(insertedEntity)
         assertThat(insertedEntity.id).isEqualTo(id)
         assertThat(insertedEntity.expression).isEqualTo(expression)
@@ -85,7 +85,7 @@ class ExpressionsHistoryDaoTest {
     }
 
     @Test
-    fun givenNewEntityWithoutId_insertOne_insertsWithGeneratedId() {
+    fun givenNewEntityWithoutId_insertOne_insertsWithGeneratedId() = runBlockingTest {
         val expression = "5 tan π + 6 ^ 3"
         val result = -2.5
         val time = Date(78281612)
@@ -99,7 +99,7 @@ class ExpressionsHistoryDaoTest {
         val id = dao.insertOne(entity).toInt()
         assertThat(id).isAtLeast(1)
 
-        val insertedEntity = dao.findOneById(id).await()
+        val insertedEntity = dao.findById(id)
         checkNotNull(insertedEntity)
         assertThat(insertedEntity.id).isEqualTo(id)
         assertThat(insertedEntity.expression).isEqualTo(expression)
@@ -110,15 +110,15 @@ class ExpressionsHistoryDaoTest {
     }
 
     @Test
-    fun givenInsertedEntity_deleteOneById_deletesThisEntity() {
+    fun givenInsertedEntity_deleteOneById_deletesThisEntity() = runBlockingTest {
         val id = 100
 
         dao.insertOne(ExpressionsHistoryEntity(id = id, expression = "whatever", result = 0.3))
         val affectedEntries = dao.deleteOneById(id)
 
         assertThat(affectedEntries).isEqualTo(1)
-        checkTableContainsExactly()
-        assertThat(dao.findOneById(id).await()).isNull()
+        checkTableContainsExactly(/*nothing*/)
+        assertThat(dao.findById(id)).isNull()
     }
 
     @Test

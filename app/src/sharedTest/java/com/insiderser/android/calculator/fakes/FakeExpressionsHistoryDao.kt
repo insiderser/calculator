@@ -1,7 +1,5 @@
 package com.insiderser.android.calculator.fakes
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.paging.DataSource
 import com.insiderser.android.calculator.db.ExpressionsHistoryDao
 import com.insiderser.android.calculator.db.ExpressionsHistoryEntity
@@ -15,10 +13,7 @@ class FakeExpressionsHistoryDao : ExpressionsHistoryDao {
         throw TODO("not implemented")
     }
 
-    override fun findOneById(id: Int): LiveData<ExpressionsHistoryEntity> {
-        val value = history.getOrDefault(id, null)
-        return MutableLiveData(value)
-    }
+    override suspend fun findById(id: Int): ExpressionsHistoryEntity? = history.getOrDefault(id, null)
 
     override fun insertOne(entity: ExpressionsHistoryEntity): Long {
         if (entity.id >= 1) {
