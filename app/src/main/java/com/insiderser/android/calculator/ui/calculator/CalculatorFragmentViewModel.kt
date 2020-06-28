@@ -47,8 +47,6 @@ class CalculatorFragmentViewModel @Inject constructor(
     private val addExpressionToHistoryUseCase: AddExpressionToHistoryUseCase
 ) : ViewModel() {
 
-    // Why not StringBuffer? Because we want to synchronize on the level
-    // of the whole transformation, not on the level of individual operation.
     private val expressionBuilder = StringBuilder()
     private val expressionChangedChannel = ConflatedBroadcastChannel(Unit)
 
@@ -71,10 +69,8 @@ class CalculatorFragmentViewModel @Inject constructor(
     fun onArithmeticButtonClicked(tag: String) = updateExpression { append(tag) }
 
     fun onEqualButtonClicked() = updateExpression {
-        viewModelScope.launch {
-            if (isNotEmpty()) {
-                addExpressionToHistoryUseCase(expressionBuilder.toString())
-            }
+        if (isNotEmpty()) {
+            addExpressionToHistoryUseCase(expressionBuilder.toString())
         }
     }
 
@@ -86,10 +82,10 @@ class CalculatorFragmentViewModel @Inject constructor(
 
     fun onClearButtonLongClick() = updateExpression { clear() }
 
-    private inline fun updateExpression(crossinline transform: StringBuilder.() -> Unit) {
-        synchronized(expressionBuilder) {
+    private inline fun updateExpression(crossinline transform: suspend StringBuilder.() -> Unit) {
+        viewModelScope.launch {
             transform(expressionBuilder)
+            expressionChangedChannel.offer(Unit)
         }
-        expressionChangedChannel.offer(Unit)
     }
 }
