@@ -26,6 +26,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.insiderser.android.calculator.domain.history.AddExpressionToHistoryUseCase
+import com.insiderser.android.calculator.domain.history.GetExpressionFromHistoryUseCase
 import com.insiderser.android.calculator.domain.math.EvaluateExpressionUseCase
 import com.insiderser.android.calculator.domain.math.LocalizeExpressionUseCase
 import com.insiderser.android.calculator.model.Expression
@@ -45,7 +46,8 @@ import javax.inject.Inject
 class CalculatorFragmentViewModel @Inject constructor(
     private val evaluateExpressionUseCase: EvaluateExpressionUseCase,
     private val localizeExpressionUseCase: LocalizeExpressionUseCase,
-    private val addExpressionToHistoryUseCase: AddExpressionToHistoryUseCase
+    private val addExpressionToHistoryUseCase: AddExpressionToHistoryUseCase,
+    private val getExpressionFromHistoryUseCase: GetExpressionFromHistoryUseCase
 ) : ViewModel() {
 
     private val expressionBuilder = StringBuilder()
@@ -82,6 +84,23 @@ class CalculatorFragmentViewModel @Inject constructor(
     }
 
     fun onClearButtonLongClick() = updateExpression { clear() }
+
+    fun setHistoryId(historyId: Int) {
+        viewModelScope.launch {
+            val expression = getExpressionFromHistoryUseCase(historyId)
+                .getOrElse { e ->
+                    Timber.i(e)
+                    return@launch
+                }
+
+            setExpression(expression.value)
+        }
+    }
+
+    private fun setExpression(expression: String) = updateExpression {
+        clear()
+        append(expression)
+    }
 
     private inline fun updateExpression(crossinline transform: suspend StringBuilder.() -> Unit) {
         viewModelScope.launch {

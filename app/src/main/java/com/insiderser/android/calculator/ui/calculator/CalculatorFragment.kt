@@ -33,6 +33,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.navigation.ui.onNavDestinationSelected
 import com.insiderser.android.calculator.R
 import com.insiderser.android.calculator.dagger.injector
@@ -56,6 +57,8 @@ class CalculatorFragment : Fragment() {
 
     private var binding: CalculatorFragmentBinding by viewLifecycleScoped()
 
+    private val navOptions: CalculatorFragmentArgs by navArgs()
+
     override fun onAttach(context: Context) {
         injector.inject(this)
         super.onAttach(context)
@@ -69,6 +72,8 @@ class CalculatorFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (activity as? NavigationHost)?.registerToolbarWithNavigation(binding.toolbar)
         binding.toolbar.setOnMenuItemClickListener { handleOnMenuItemClicked(it) }
+
+        viewModel.setHistoryId(navOptions.historyId)
 
         configureInsets()
         configureNumpad()

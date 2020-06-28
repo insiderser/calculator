@@ -8,6 +8,7 @@ import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
+import androidx.test.espresso.matcher.ViewMatchers.isDescendantOfA
 import androidx.test.espresso.matcher.ViewMatchers.isDisplayed
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.espresso.matcher.ViewMatchers.withText
@@ -17,6 +18,7 @@ import com.insiderser.android.calculator.test.ExpressionsHistoryEntityProvider
 import com.insiderser.android.calculator.test.rules.AppDatabaseRule
 import com.insiderser.android.calculator.test.rules.MainActivityRule
 import com.insiderser.android.calculator.ui.MainActivity
+import org.hamcrest.Matchers.allOf
 import org.hamcrest.Matchers.not
 import org.junit.After
 import org.junit.Before
@@ -59,6 +61,26 @@ class HistoryFragmentTest {
     }
 
     @Test
+    fun whenClickingOnExpression_shouldOpenCalculatorScreenWithSelectedExpression() {
+        checkEnglishLocale()
+
+        val expression = ExpressionsHistoryEntityProvider.item1.expression
+
+        onView(
+            allOf(
+                isDescendantOfA(withId(R.id.history_list)),
+                withText(expression)
+            )
+        )
+            .perform(click())
+
+        checkInCalculatorFragment()
+
+        onView(withId(R.id.expression))
+            .check(matches(withText(expression)))
+    }
+
+    @Test
     fun whenClickingOnClearHistoryContextMenu_listShouldBeEmpty() {
         openContextualActionModeOverflowMenu()
 
@@ -76,5 +98,11 @@ class HistoryFragmentTest {
         if (Locale.getDefault().language != Locale("en").language) {
             throw IllegalStateException("Cannot test on locales other than English")
         }
+    }
+
+    private fun checkInCalculatorFragment() {
+        onView(withText("5")).check(matches(isCompletelyDisplayed()))
+        onView(withText("=")).check(matches(isCompletelyDisplayed()))
+        onView(withText("÷")).check(matches(isCompletelyDisplayed()))
     }
 }

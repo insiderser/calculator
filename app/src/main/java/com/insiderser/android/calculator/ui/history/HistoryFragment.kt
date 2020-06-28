@@ -32,9 +32,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
+import androidx.navigation.fragment.findNavController
 import com.insiderser.android.calculator.R
 import com.insiderser.android.calculator.dagger.injector
 import com.insiderser.android.calculator.databinding.HistoryFragmentBinding
+import com.insiderser.android.calculator.model.HistoryItem
 import com.insiderser.android.calculator.ui.NavigationHost
 import com.insiderser.android.calculator.utils.consume
 import com.insiderser.android.calculator.utils.viewLifecycleScoped
@@ -50,7 +52,9 @@ class HistoryFragment : Fragment() {
 
     private var binding: HistoryFragmentBinding by viewLifecycleScoped()
 
-    private val historyAdapter: HistoryListAdapter by lazy { HistoryListAdapter() }
+    private val historyAdapter: HistoryListAdapter by lazy {
+        HistoryListAdapter(onHistoryItemClickedListener = { finishWithResult(it) })
+    }
 
     override fun onAttach(context: Context) {
         injector.inject(this)
@@ -82,5 +86,10 @@ class HistoryFragment : Fragment() {
         if (item.itemId == R.id.clear_all) {
             viewModel.clearHistory()
         }
+    }
+
+    private fun finishWithResult(item: HistoryItem) {
+        val navController = findNavController()
+        navController.navigate(HistoryFragmentDirections.actionHistoryToCalculatorDest(item.id))
     }
 }

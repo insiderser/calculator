@@ -30,13 +30,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.insiderser.android.calculator.databinding.HistoryListItemBinding
 import com.insiderser.android.calculator.model.HistoryItem
 
-class HistoryListAdapter :
-    PagedListAdapter<HistoryItem, HistoryViewHolder>(HistoryItemDiffCallback) {
+class HistoryListAdapter(
+    private val onHistoryItemClickedListener: OnHistoryItemClickedListener
+) : PagedListAdapter<HistoryItem, HistoryViewHolder>(HistoryItemDiffCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): HistoryViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val binding = HistoryListItemBinding.inflate(inflater, parent, false)
-        return HistoryViewHolder(binding)
+        return HistoryViewHolder(binding, onHistoryItemClickedListener)
     }
 
     override fun onBindViewHolder(holder: HistoryViewHolder, position: Int) {
@@ -45,14 +46,27 @@ class HistoryListAdapter :
 }
 
 class HistoryViewHolder(
-    private val binding: HistoryListItemBinding
+    private val binding: HistoryListItemBinding,
+    onHistoryItemClickedListener: OnHistoryItemClickedListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
+    private var currentItem: HistoryItem? = null
+
+    init {
+        binding.root.setOnClickListener {
+            val item = currentItem ?: return@setOnClickListener
+            onHistoryItemClickedListener(item)
+        }
+    }
+
     fun bind(item: HistoryItem?) {
+        currentItem = item
         binding.expression.text = item?.expression?.value
         binding.result.text = item?.result?.value
     }
 }
+
+typealias OnHistoryItemClickedListener = (HistoryItem) -> Unit
 
 private object HistoryItemDiffCallback : DiffUtil.ItemCallback<HistoryItem>() {
 

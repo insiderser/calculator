@@ -24,7 +24,9 @@ package com.insiderser.android.calculator.ui.calculator
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.google.common.truth.Truth.assertThat
+import com.insiderser.android.calculator.db.ExpressionsHistoryEntity
 import com.insiderser.android.calculator.domain.history.AddExpressionToHistoryUseCase
+import com.insiderser.android.calculator.domain.history.GetExpressionFromHistoryUseCase
 import com.insiderser.android.calculator.domain.math.EvaluateExpressionUseCase
 import com.insiderser.android.calculator.domain.math.LocalizeExpressionUseCase
 import com.insiderser.android.calculator.fakes.FakeExpressionsHistoryDao
@@ -78,7 +80,8 @@ class CalculatorFragmentViewModelTest {
                 historyDao,
                 EvaluateExpressionUseCase(testDispatcher),
                 testDispatcher
-            )
+            ),
+            GetExpressionFromHistoryUseCase(historyDao, testDispatcher)
         )
     }
 
@@ -138,5 +141,19 @@ class CalculatorFragmentViewModelTest {
         viewModel.onEqualButtonClicked()
 
         assertThat(historyDao.history.any { it.value.expression == "5+9" }).isTrue()
+    }
+
+    @Test
+    fun setHistoryId_loadsExpressionFromHistoryDb() = testDispatcher.runBlockingTest {
+        viewModel.expression.observeForever {}
+
+        val id = 100
+        val expression = "some-expression-here"
+        val historyEntity = ExpressionsHistoryEntity(expression, 10.0)
+        historyDao.history[id] = historyEntity
+
+        viewModel.setHistoryId(id)
+
+        assertThat(viewModel.expression.value).isEqualTo(Expression(expression))
     }
 }
