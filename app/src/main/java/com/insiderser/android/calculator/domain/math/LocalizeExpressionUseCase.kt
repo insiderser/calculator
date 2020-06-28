@@ -21,6 +21,7 @@
  */
 package com.insiderser.android.calculator.domain.math
 
+import com.insiderser.android.calculator.model.Expression
 import java.text.DecimalFormatSymbols
 import javax.inject.Inject
 
@@ -47,19 +48,24 @@ class LocalizeExpressionUseCase @Inject constructor() {
     }
 
     /**
-     * @return Localized representation of the [number][expression].
+     * @return Localized representation of the [number][value].
      */
-    operator fun invoke(expression: Double): String =
-        invoke(expression.toString().replace(Regex("""\.0+$"""), ""))
+    operator fun invoke(value: Double): Expression {
+        val valueAsString = value.toString().removeTrailingZeros()
+        val expression = Expression(valueAsString)
+        return invoke(expression)
+    }
 
     /**
      * @return Localized representation of the [expression].
      */
-    operator fun invoke(expression: String): String {
-        var localizedExpression = expression
+    operator fun invoke(expression: Expression): Expression {
+        var localizedExpression: String = expression.value
         replacementMap.forEach { (key, replacement) ->
             localizedExpression = localizedExpression.replace(key, replacement)
         }
-        return localizedExpression
+        return Expression(localizedExpression)
     }
+
+    private fun String.removeTrailingZeros(): String = replace(Regex("""\.0+$"""), "")
 }

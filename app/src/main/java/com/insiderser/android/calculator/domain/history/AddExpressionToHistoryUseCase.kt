@@ -27,6 +27,7 @@ import com.insiderser.android.calculator.db.ExpressionsHistoryDao
 import com.insiderser.android.calculator.db.ExpressionsHistoryEntity
 import com.insiderser.android.calculator.domain.UseCase
 import com.insiderser.android.calculator.domain.math.EvaluateExpressionUseCase
+import com.insiderser.android.calculator.model.Expression
 import kotlinx.coroutines.CoroutineDispatcher
 import javax.inject.Inject
 
@@ -34,13 +35,13 @@ class AddExpressionToHistoryUseCase @Inject constructor(
     private val historyDao: ExpressionsHistoryDao,
     private val evaluateExpressionUseCase: EvaluateExpressionUseCase,
     @IO ioDispatcher: CoroutineDispatcher
-) : UseCase<String, Unit>() {
+) : UseCase<Expression, Unit>() {
 
     override val coroutineDispatcher = ioDispatcher
 
-    override suspend fun execute(param: String) {
+    override suspend fun execute(param: Expression) {
         val result = evaluateExpressionUseCase(param)
-        val entity = ExpressionsHistoryEntity(param, result.getOrThrow())
+        val entity = ExpressionsHistoryEntity(param.value, result.getOrThrow())
 
         historyDao.insertOne(entity)
     }

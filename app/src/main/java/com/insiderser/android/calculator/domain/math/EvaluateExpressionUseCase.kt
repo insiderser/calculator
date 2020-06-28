@@ -23,6 +23,7 @@ package com.insiderser.android.calculator.domain.math
 
 import com.insiderser.android.calculator.dagger.Default
 import com.insiderser.android.calculator.domain.UseCase
+import com.insiderser.android.calculator.model.Expression
 import kotlinx.coroutines.CoroutineDispatcher
 import net.objecthunter.exp4j.ExpressionBuilder
 import net.objecthunter.exp4j.operator.Operator
@@ -33,13 +34,13 @@ import javax.inject.Inject
  */
 class EvaluateExpressionUseCase @Inject constructor(
     @Default defaultDispatcher: CoroutineDispatcher
-) : UseCase<String, Double>() {
+) : UseCase<Expression, Double>() {
 
     override val coroutineDispatcher = defaultDispatcher
 
-    override suspend fun execute(param: String): Double {
+    override suspend fun execute(param: Expression): Double {
         try {
-            val result = ExpressionBuilder(param)
+            val result = ExpressionBuilder(param.value)
                 .operator(FactorialOperator)
                 .build()
                 .evaluate() + 0.0 // This ensures that we don't get -0.0

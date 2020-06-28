@@ -25,7 +25,7 @@ import java.util.Date
 
 data class HistoryItem(
     val id: Int,
-    val expression: String,
-    val result: String,
+    val expression: Expression,
+    val result: Expression,
     val dateAdded: Date
 )

@@ -49,8 +49,8 @@ class HistoryViewHolder(
 ) : RecyclerView.ViewHolder(binding.root) {
 
     fun bind(item: HistoryItem?) {
-        binding.expression.text = item?.expression
-        binding.result.text = item?.result
+        binding.expression.text = item?.expression?.value
+        binding.result.text = item?.result?.value
     }
 }
 

@@ -22,6 +22,7 @@
 package com.insiderser.android.calculator.domain.math
 
 import com.google.common.truth.Truth.assertThat
+import com.insiderser.android.calculator.model.Expression
 import kotlinx.coroutines.test.TestCoroutineDispatcher
 import kotlinx.coroutines.test.runBlockingTest
 import org.junit.Test
@@ -70,12 +71,12 @@ class EvaluateExpressionUseCaseTest {
     }
 
     private suspend fun checkExpressionEvaluated(expression: String, expectedResult: Number) {
-        val result = evaluator(expression)
+        val result = evaluator(Expression(expression))
         assertThat(result.getOrThrow()).isWithin(PRECISION).of(expectedResult.toDouble())
     }
 
     private suspend fun checkEvaluateThrowsInvalidExpressionException(expression: String) {
-        val result = evaluator(expression)
+        val result = evaluator(Expression(expression))
         assertThat(result.isFailure)
         assertThat(result.exceptionOrNull()).isInstanceOf(InvalidExpressionException::class.java)
     }

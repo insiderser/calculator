@@ -3,6 +3,7 @@ package com.insiderser.android.calculator.domain.history
 import com.google.common.truth.Truth.assertThat
 import com.insiderser.android.calculator.domain.math.EvaluateExpressionUseCase
 import com.insiderser.android.calculator.fakes.FakeExpressionsHistoryDao
+import com.insiderser.android.calculator.model.Expression
 import com.insiderser.android.calculator.test.ExpressionsHistoryEntityProvider
 import io.mockk.coEvery
 import io.mockk.mockk
@@ -23,10 +24,10 @@ class AddExpressionToHistoryUseCaseTest {
     fun givenValidExpression_invoke_addsExpressionToHistoryTable() = testDispatcher.runBlockingTest {
         fakeHistoryDao.history.clear()
         val (expression, value, _, _) = ExpressionsHistoryEntityProvider.item1
+        val wrappedExpression = Expression(expression)
+        coEvery { evaluateExpressionUseCase.invoke(eq(wrappedExpression)) } returns Result.success(value)
 
-        coEvery { evaluateExpressionUseCase.invoke(expression) } returns Result.success(value)
-
-        val result = useCase(expression)
+        val result = useCase(wrappedExpression)
 
         assertThat(result.isSuccess).isTrue()
 
@@ -38,10 +39,10 @@ class AddExpressionToHistoryUseCaseTest {
     @Test
     fun givenInvalidExpression_invoke_fails() = testDispatcher.runBlockingTest {
         val (expression, _, _, _) = ExpressionsHistoryEntityProvider.item1
+        val wrappedExpression = Expression(expression)
+        coEvery { evaluateExpressionUseCase.invoke(wrappedExpression) } returns Result.failure(Throwable())
 
-        coEvery { evaluateExpressionUseCase.invoke(expression) } returns Result.failure(Throwable())
-
-        val result = useCase(expression)
+        val result = useCase(wrappedExpression)
 
         assertThat(result.isFailure).isTrue()
 

@@ -28,6 +28,7 @@ import androidx.lifecycle.viewModelScope
 import com.insiderser.android.calculator.domain.history.AddExpressionToHistoryUseCase
 import com.insiderser.android.calculator.domain.math.EvaluateExpressionUseCase
 import com.insiderser.android.calculator.domain.math.LocalizeExpressionUseCase
+import com.insiderser.android.calculator.model.Expression
 import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
@@ -51,17 +52,17 @@ class CalculatorFragmentViewModel @Inject constructor(
     private val expressionChangedChannel = ConflatedBroadcastChannel(Unit)
 
     /** Localized current expression. */
-    val expression: LiveData<CharSequence> = expressionChangedChannel.asFlow()
-        .map { localizeExpressionUseCase(expressionBuilder.toString()) }
+    val expression: LiveData<Expression> = expressionChangedChannel.asFlow()
+        .map { localizeExpressionUseCase(expressionBuilder.toExpression()) }
         .asLiveData(viewModelScope.coroutineContext)
 
     /** The localized result of the current expression. */
-    val result: LiveData<CharSequence> = expressionChangedChannel.asFlow()
+    val result: LiveData<Expression> = expressionChangedChannel.asFlow()
         .mapLatest {
-            evaluateExpressionUseCase(expressionBuilder.toString())
+            evaluateExpressionUseCase(expressionBuilder.toExpression())
                 .onFailure { e -> Timber.i(e) }
                 .map { result -> localizeExpressionUseCase(result) }
-                .getOrDefault("")
+                .getOrDefault(Expression(""))
         }
         .buffer(CONFLATED)
         .asLiveData(viewModelScope.coroutineContext)
@@ -70,7 +71,7 @@ class CalculatorFragmentViewModel @Inject constructor(
 
     fun onEqualButtonClicked() = updateExpression {
         if (isNotEmpty()) {
-            addExpressionToHistoryUseCase(expressionBuilder.toString())
+            addExpressionToHistoryUseCase(expressionBuilder.toExpression())
         }
     }
 
@@ -89,3 +90,5 @@ class CalculatorFragmentViewModel @Inject constructor(
         }
     }
 }
+
+private fun StringBuilder.toExpression() = Expression(this.toString())

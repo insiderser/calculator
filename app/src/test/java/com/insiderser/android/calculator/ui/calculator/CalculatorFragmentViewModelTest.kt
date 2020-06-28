@@ -28,6 +28,7 @@ import com.insiderser.android.calculator.domain.history.AddExpressionToHistoryUs
 import com.insiderser.android.calculator.domain.math.EvaluateExpressionUseCase
 import com.insiderser.android.calculator.domain.math.LocalizeExpressionUseCase
 import com.insiderser.android.calculator.fakes.FakeExpressionsHistoryDao
+import com.insiderser.android.calculator.model.Expression
 import io.mockk.MockKAnnotations
 import io.mockk.every
 import io.mockk.impl.annotations.MockK
@@ -65,10 +66,10 @@ class CalculatorFragmentViewModelTest {
 
         every { localizeExpressionUseCase.invoke(any<Double>()) } answers {
             val valueParameter = arg<Double>(0)
-            valueParameter.toString()
+            Expression(valueParameter.toString())
         }
 
-        every { localizeExpressionUseCase.invoke(any<String>()) } returnsArgument 0
+        every { localizeExpressionUseCase.invoke(any<Expression>()) } returnsArgument 0
 
         viewModel = CalculatorFragmentViewModel(
             EvaluateExpressionUseCase(testDispatcher),
@@ -125,8 +126,8 @@ class CalculatorFragmentViewModelTest {
         expectedExpression: String,
         expectedResult: String
     ) {
-        assertThat(viewModel.expression.value).isEqualTo(expectedExpression)
-        assertThat(viewModel.result.value).isEqualTo(expectedResult)
+        assertThat(viewModel.expression.value).isEqualTo(Expression(expectedExpression))
+        assertThat(viewModel.result.value).isEqualTo(Expression(expectedResult))
     }
 
     @Test

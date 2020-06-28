@@ -6,6 +6,7 @@ import androidx.paging.toLiveData
 import com.insiderser.android.calculator.db.ExpressionsHistoryDao
 import com.insiderser.android.calculator.db.ExpressionsHistoryEntity
 import com.insiderser.android.calculator.domain.math.LocalizeExpressionUseCase
+import com.insiderser.android.calculator.model.Expression
 import com.insiderser.android.calculator.model.HistoryItem
 import javax.inject.Inject
 
@@ -20,7 +21,7 @@ class GetFullHistoryUseCase @Inject constructor(
 
     private fun ExpressionsHistoryEntity.toHistoryItem() = HistoryItem(
         id = id,
-        expression = localizeExpressionUseCase(expression),
+        expression = localizeExpressionUseCase(Expression(expression)),
         result = localizeExpressionUseCase(result),
         dateAdded = timeAdded
     )

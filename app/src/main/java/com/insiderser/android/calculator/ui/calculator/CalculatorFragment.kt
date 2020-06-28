@@ -106,7 +106,7 @@ class CalculatorFragment : Fragment() {
     private fun observeData() {
         viewModel.expression.observe(viewLifecycleOwner) { expression ->
             binding.expression.run {
-                text = expression
+                text = expression.value
                 post {
                     binding.expressionScrollView.smoothScrollTo(width, 0)
                 }
@@ -115,7 +115,7 @@ class CalculatorFragment : Fragment() {
 
         viewModel.result.observe(viewLifecycleOwner) { result ->
             binding.result.run {
-                text = result
+                text = result.value
                 post {
                     binding.resultScrollView.smoothScrollTo(width, 0)
                 }
