@@ -43,7 +43,7 @@ import javax.inject.Inject
 /**
  * A [ViewModel] for [CalculatorFragment].
  */
-class CalculatorFragmentViewModel @Inject constructor(
+class CalculatorViewModel @Inject constructor(
     private val evaluateExpressionUseCase: EvaluateExpressionUseCase,
     private val localizeExpressionUseCase: LocalizeExpressionUseCase,
     private val addExpressionToHistoryUseCase: AddExpressionToHistoryUseCase,

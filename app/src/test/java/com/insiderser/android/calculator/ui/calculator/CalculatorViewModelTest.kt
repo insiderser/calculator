@@ -46,7 +46,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @OptIn(ObsoleteCoroutinesApi::class)
-class CalculatorFragmentViewModelTest {
+class CalculatorViewModelTest {
 
     @Rule
     @JvmField
@@ -57,7 +57,7 @@ class CalculatorFragmentViewModelTest {
 
     private val historyDao = FakeExpressionsHistoryDao()
 
-    private lateinit var viewModel: CalculatorFragmentViewModel
+    private lateinit var viewModel: CalculatorViewModel
 
     private val testDispatcher = TestCoroutineDispatcher()
 
@@ -73,7 +73,7 @@ class CalculatorFragmentViewModelTest {
 
         every { localizeExpressionUseCase.invoke(any<Expression>()) } returnsArgument 0
 
-        viewModel = CalculatorFragmentViewModel(
+        viewModel = CalculatorViewModel(
             EvaluateExpressionUseCase(testDispatcher),
             localizeExpressionUseCase,
             AddExpressionToHistoryUseCase(

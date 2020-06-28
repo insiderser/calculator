@@ -53,7 +53,7 @@ class CalculatorFragment : Fragment() {
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
-    private val viewModel: CalculatorFragmentViewModel by viewModels { viewModelFactory }
+    private val viewModel: CalculatorViewModel by viewModels { viewModelFactory }
 
     private var binding: CalculatorFragmentBinding by viewLifecycleScoped()
 
