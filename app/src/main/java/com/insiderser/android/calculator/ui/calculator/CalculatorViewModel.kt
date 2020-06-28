@@ -74,7 +74,9 @@ class CalculatorViewModel @Inject constructor(
 
     fun onEqualButtonClicked() = updateExpression {
         if (isNotEmpty()) {
-            val resultValue = evaluateExpressionUseCase(expressionBuilder.toExpression())
+            val initialExpression = expressionBuilder.toExpression()
+
+            val resultValue = evaluateExpressionUseCase(initialExpression)
                 .getOrElse { exception ->
                     Timber.i(exception)
                     return@updateExpression
@@ -84,7 +86,7 @@ class CalculatorViewModel @Inject constructor(
 
             setExpression(resultValue)
 
-            addExpressionToHistoryUseCase(expressionBuilder.toExpression())
+            addExpressionToHistoryUseCase(initialExpression)
         }
     }
 
