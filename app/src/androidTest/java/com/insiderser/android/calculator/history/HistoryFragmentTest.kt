@@ -5,6 +5,8 @@ import androidx.test.core.app.launchActivity
 import androidx.test.espresso.Espresso.onView
 import androidx.test.espresso.Espresso.openContextualActionModeOverflowMenu
 import androidx.test.espresso.action.ViewActions.click
+import androidx.test.espresso.action.ViewActions.swipeRight
+import androidx.test.espresso.assertion.ViewAssertions.doesNotExist
 import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.hasDescendant
 import androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed
@@ -66,18 +68,32 @@ class HistoryFragmentTest {
 
         val expression = ExpressionsHistoryEntityProvider.item1.expression
 
-        onView(
-            allOf(
-                isDescendantOfA(withId(R.id.history_list)),
-                withText(expression)
-            )
-        )
+        onView(withExpression(expression))
+            .check(matches(isDisplayed()))
             .perform(click())
 
         checkInCalculatorFragment()
 
         onView(withId(R.id.expression))
             .check(matches(withText(expression)))
+    }
+
+    @Test
+    fun whenSwipingOutExpression_shouldRemoveItFromList() {
+        checkEnglishLocale()
+
+        val expression = ExpressionsHistoryEntityProvider.item1.expression
+
+        onView(withExpression(expression))
+            .check(matches(isDisplayed()))
+            .perform(swipeRight())
+
+        // Espresso idling checker doesn't know anything about IO dispatcher,
+        // so we have to wait until all work is completed (which we don't know when will happen).
+        Thread.sleep(1000)
+
+        onView(withExpression(expression))
+            .check(doesNotExist())
     }
 
     @Test
@@ -93,6 +109,11 @@ class HistoryFragmentTest {
     }
 
     private fun isEmpty() = not(hasDescendant(isDisplayed()))
+
+    private fun withExpression(expression: String) = allOf(
+        isDescendantOfA(withId(R.id.history_list)),
+        withText(expression)
+    )
 
     private fun checkEnglishLocale() {
         if (Locale.getDefault().language != Locale("en").language) {

@@ -28,13 +28,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.PagedList
 import com.insiderser.android.calculator.domain.history.ClearHistoryUseCase
 import com.insiderser.android.calculator.domain.history.GetFullHistoryUseCase
+import com.insiderser.android.calculator.domain.history.RemoveFromHistoryUseCase
 import com.insiderser.android.calculator.domain.invoke
 import com.insiderser.android.calculator.model.HistoryItem
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 class HistoryViewModel @Inject constructor(
     getFullHistoryUseCase: GetFullHistoryUseCase,
+    private val removeFromHistoryUseCase: RemoveFromHistoryUseCase,
     private val clearHistoryUseCase: ClearHistoryUseCase
 ) : ViewModel() {
 
@@ -43,6 +46,14 @@ class HistoryViewModel @Inject constructor(
     fun clearHistory() {
         viewModelScope.launch {
             clearHistoryUseCase()
+                .onFailure { Timber.e(it) }
+        }
+    }
+
+    fun onItemSwipedOut(item: HistoryItem) {
+        viewModelScope.launch {
+            removeFromHistoryUseCase(item)
+                .onFailure { Timber.e(it) }
         }
     }
 }

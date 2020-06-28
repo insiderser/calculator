@@ -50,7 +50,8 @@ class HistoryViewHolder(
     onHistoryItemClickedListener: OnHistoryItemClickedListener
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    private var currentItem: HistoryItem? = null
+    var currentItem: HistoryItem? = null
+        private set
 
     init {
         binding.root.setOnClickListener {

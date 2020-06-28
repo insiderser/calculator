@@ -33,6 +33,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.observe
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
 import com.insiderser.android.calculator.R
 import com.insiderser.android.calculator.dagger.injector
 import com.insiderser.android.calculator.databinding.HistoryFragmentBinding
@@ -76,6 +78,9 @@ class HistoryFragment : Fragment() {
             setHasFixedSize(true)
             adapter = historyAdapter
 
+            val callback = HistoryItemTouchHelperCallback()
+            ItemTouchHelper(callback).attachToRecyclerView(this)
+
             applySystemWindowInsetsToPadding(bottom = true)
         }
 
@@ -91,5 +96,24 @@ class HistoryFragment : Fragment() {
     private fun finishWithResult(item: HistoryItem) {
         val navController = findNavController()
         navController.navigate(HistoryFragmentDirections.actionHistoryToCalculatorDest(item.id))
+    }
+
+    inner class HistoryItemTouchHelperCallback : ItemTouchHelper.Callback() {
+
+        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int =
+            makeMovementFlags(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT)
+
+        override fun onMove(
+            recyclerView: RecyclerView,
+            viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean = false
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            check(viewHolder is HistoryViewHolder)
+
+            val item = viewHolder.currentItem ?: return
+            viewModel.onItemSwipedOut(item)
+        }
     }
 }
