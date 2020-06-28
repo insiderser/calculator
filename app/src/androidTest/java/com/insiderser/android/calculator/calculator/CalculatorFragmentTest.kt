@@ -97,6 +97,8 @@ class CalculatorFragmentTest {
         checkDisplayedExpression("")
         checkDisplayedResult("")
 
+        clickOnViewWithText_thenCheckExpressionAndResult("=", "", "")
+
         clickOnViewWithText_thenCheckExpressionAndResult("-", "-", "")
         clickOnViewWithText_thenCheckExpressionAndResult("0", "-0", "0")
         clickOnViewWithText_thenCheckExpressionAndResult("+", "-0+", "")
@@ -107,6 +109,7 @@ class CalculatorFragmentTest {
         clickOnViewWithText_thenCheckExpressionAndResult("1", "-0+9.1×1", "9.1")
         clickOnViewWithText_thenCheckExpressionAndResult(".", "-0+9.1×1.", "9.1")
         clickOnViewWithText_thenCheckExpressionAndResult("2", "-0+9.1×1.2", "10.92")
+        clickOnViewWithText_thenCheckExpressionAndResult("=", "10.92", "10.92")
 
         longClickOnBackspace()
         checkDisplayedExpression("")
@@ -115,6 +118,7 @@ class CalculatorFragmentTest {
         clickOnViewWithText_thenCheckExpressionAndResult("1", "1", "1")
         clickOnViewWithText_thenCheckExpressionAndResult("÷", "1÷", "")
         clickOnViewWithText_thenCheckExpressionAndResult("0", "1÷0", "")
+        clickOnViewWithText_thenCheckExpressionAndResult("=", "1÷0", "")
     }
 
     private fun checkInSettings() {

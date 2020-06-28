@@ -22,6 +22,7 @@
 package com.insiderser.android.calculator.domain.math
 
 import com.insiderser.android.calculator.model.Expression
+import com.insiderser.android.calculator.utils.removeTrailingZeros
 import java.text.DecimalFormatSymbols
 import javax.inject.Inject
 
@@ -66,6 +67,4 @@ class LocalizeExpressionUseCase @Inject constructor() {
         }
         return Expression(localizedExpression)
     }
-
-    private fun String.removeTrailingZeros(): String = replace(Regex("""\.0+$"""), "")
 }

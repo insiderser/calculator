@@ -144,6 +144,18 @@ class CalculatorViewModelTest {
     }
 
     @Test
+    fun onEqualButtonClicked_setsExpressionToExpressionValue() = testDispatcher.runBlockingTest {
+        viewModel.expression.observeForever {}
+
+        viewModel.onArithmeticButtonClicked("5")
+        viewModel.onArithmeticButtonClicked("+")
+        viewModel.onArithmeticButtonClicked("9")
+        viewModel.onEqualButtonClicked()
+
+        assertThat(viewModel.expression.value?.value).isEqualTo("14")
+    }
+
+    @Test
     fun setHistoryId_loadsExpressionFromHistoryDb() = testDispatcher.runBlockingTest {
         viewModel.expression.observeForever {}
 

@@ -30,6 +30,7 @@ import com.insiderser.android.calculator.domain.history.GetExpressionFromHistory
 import com.insiderser.android.calculator.domain.math.EvaluateExpressionUseCase
 import com.insiderser.android.calculator.domain.math.LocalizeExpressionUseCase
 import com.insiderser.android.calculator.model.Expression
+import com.insiderser.android.calculator.utils.removeTrailingZeros
 import kotlinx.coroutines.channels.Channel.Factory.CONFLATED
 import kotlinx.coroutines.channels.ConflatedBroadcastChannel
 import kotlinx.coroutines.flow.asFlow
@@ -73,6 +74,16 @@ class CalculatorViewModel @Inject constructor(
 
     fun onEqualButtonClicked() = updateExpression {
         if (isNotEmpty()) {
+            val resultValue = evaluateExpressionUseCase(expressionBuilder.toExpression())
+                .getOrElse { exception ->
+                    Timber.i(exception)
+                    return@updateExpression
+                }
+                .toString()
+                .removeTrailingZeros()
+
+            setExpression(resultValue)
+
             addExpressionToHistoryUseCase(expressionBuilder.toExpression())
         }
     }
